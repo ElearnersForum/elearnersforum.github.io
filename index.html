@@ -521,6 +521,7 @@ form.enquiry legend { grid-column: 1 / -1; font-family: var(--font-display); fon
 .form-note { font-size: 15px; padding: 12px 14px; border-radius: 8px; background: var(--tint); display: grid; gap: 12px; justify-items: start; }
 .form-note.is-error { background: var(--warn-bg); color: var(--warn-ink); border: 1px solid currentColor; }
 .form-hint { font-size: 14px; color: var(--muted); margin-top: 10px; }
+.field .opt { font-weight: 400; color: var(--muted); }
 .note-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .btn-wa { background: #0b7a4b; color: #ffffff; }
 .btn-wa:hover { background: #096640; }
@@ -1217,7 +1218,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
         <ul class="points"><li>Takes about 3 minutes</li><li>We reply within 1 working day to book a discovery call</li><li>Your details are used only to prepare your proposal</li></ul>
         <div class="card" style="margin-top:12px">
           <h3>Other ways to reach us</h3>
-          <ul class="points" style="margin-top:12px"><li><a data-link="quick" href="https://forms.gle/PwJdYoHa2Maqzc8v6" target="_blank" rel="noopener">Quick question? Send a short message</a></li><li><a href="#careers">Join us as a trainer</a></li></ul>
+          <ul class="points" style="margin-top:12px"><li><a href="#meet">Book a trial session or meet us online</a></li><li><a data-link="quick" href="https://forms.gle/PwJdYoHa2Maqzc8v6" target="_blank" rel="noopener">Quick question? Send a short message</a></li><li><a href="#careers">Join us as a trainer</a></li></ul>
         </div>
       </div>
 
@@ -1310,6 +1311,46 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
           </fieldset>
           <label class="consent"><input type="checkbox" id="f-consent" required="">I agree that ElearnersForum may contact me about this enquiry and store my details to prepare a proposal.</label>
           <div><button class="btn btn-primary" type="submit">Send enquiry</button><p class="form-hint" id="form-hint">Your enquiry comes straight to our team by email, you get a confirmation with your details, and you can send it on WhatsApp too.</p></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="meet">
+    <div class="wrap enquiry-layout">
+      <div class="section-head" style="margin-bottom:0">
+        <p class="label">Meet us</p>
+        <h2>Book a trial session or a virtual meeting</h2>
+        <ul class="points"><li>A video call with our team, for your organisation or for yourself</li><li>Choose any slot from 24 hours ahead, Monday to Saturday</li><li>We confirm by email and send you the video-call link</li></ul>
+      </div>
+      <div>
+        <form class="card enquiry" id="meet-form" novalidate="">
+          <div class="form-note" id="meet-note" role="status" tabindex="-1" hidden=""></div>
+          <fieldset>
+            <legend>What would you like?</legend>
+            <div class="field full">
+              <div class="chips" role="radiogroup" aria-label="What would you like?">
+                <label><input type="radio" name="m_type" value="Trial session">Trial session</label>
+                <label><input type="radio" name="m_type" value="Meeting">Meet us</label>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Choose a time</legend>
+            <div class="field"><label for="m-date">Date <span class="req">*</span></label><input id="m-date" name="m_date" type="date" required=""></div>
+            <div class="field"><label for="m-time">Time (India, IST) <span class="req">*</span></label><select id="m-time" name="m_time" required=""><option value="">Choose a date first</option></select></div>
+            <p class="field full form-hint" id="m-when" style="margin-top:0"></p>
+          </fieldset>
+          <fieldset>
+            <legend>About you</legend>
+            <div class="field"><label for="m-name">Full name <span class="req">*</span></label><input id="m-name" name="m_name" autocomplete="name" required=""></div>
+            <div class="field"><label for="m-email">Email ID <span class="req">*</span></label><input id="m-email" name="m_email" type="email" autocomplete="email" required=""></div>
+            <div class="field"><label for="m-phone">Mobile number <span class="req">*</span></label><input id="m-phone" name="m_phone" type="tel" autocomplete="tel" required=""></div>
+            <div class="field"><label for="m-company">Company <span class="opt">(optional)</span></label><input id="m-company" name="m_company" autocomplete="organization"></div>
+            <div class="field full"><label for="m-msg">What would you like to discuss? <span class="opt">(optional)</span></label><textarea id="m-msg" name="m_msg" placeholder="For example: I want to become a successful leader"></textarea></div>
+          </fieldset>
+          <label class="consent"><input type="checkbox" id="m-consent" required="">I agree that ElearnersForum may contact me to arrange this meeting.</label>
+          <div><button class="btn btn-primary" type="submit">Request a meeting</button><p class="form-hint">Your request comes straight to our team by email, and you get a confirmation with the time you chose.</p></div>
         </form>
       </div>
     </div>
@@ -1665,6 +1706,88 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       name: $f('f-name').value.trim(),
       thanks: 'Thank you. Your enquiry has reached our team by email, and we\'ll reply within 1 working day.',
       confirm: 'Thank you for your training enquiry with ElearnersForum. We have received your details and will reply within 1 working day to book a discovery call.',
+    });
+  });
+
+  // ---------- Meet us: request a trial session or virtual meeting, at least 24 hours ahead ----------
+  // Times are offered in India time (IST, UTC+5:30), Monday to Saturday, in 30-minute steps from 9:30 am to 6:00 pm.
+  const mForm = document.getElementById('meet-form'), mNote = document.getElementById('meet-note');
+  const mDate = document.getElementById('m-date'), mTime = document.getElementById('m-time'), mWhen = document.getElementById('m-when');
+  const IST = 330 * 60000, LEAD = 24 * 3600000, DAY = 86400000;
+  const SLOTS = []; for (let m = 9 * 60 + 30; m <= 18 * 60; m += 30) SLOTS.push(m);
+  const istDate = ms => new Date(ms + IST).toISOString().slice(0, 10);
+  const slotMs = (ds, min) => { const [y, mo, d] = ds.split('-').map(Number); return Date.UTC(y, mo - 1, d, 0, min) - IST; };
+  const isSunday = ds => { const [y, mo, d] = ds.split('-').map(Number); return new Date(Date.UTC(y, mo - 1, d)).getUTCDay() === 0; };
+  const fmtTime = min => { const h = Math.floor(min / 60), m = min % 60; return ((h + 11) % 12 + 1) + ':' + String(m).padStart(2, '0') + (h < 12 ? ' am' : ' pm'); };
+  const fmtDate = ds => { const [y, mo, d] = ds.split('-').map(Number); return new Date(Date.UTC(y, mo - 1, d)).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }); };
+  const freeSlots = ds => isSunday(ds) ? [] : SLOTS.filter(min => slotMs(ds, min) >= Date.now() + LEAD);
+  const firstSlot = () => {
+    for (let i = 0; i < 10; i++) { const ds = istDate(Date.now() + LEAD + i * DAY), s = freeSlots(ds); if (s.length) return [ds, s[0]]; }
+    return null;
+  };
+  // Visitors outside India also see the time in their own time zone.
+  const localNote = () => {
+    if (!mDate.value || !mTime.value || new Date().getTimezoneOffset() === -330) return '';
+    const t = new Date(slotMs(mDate.value, +mTime.value));
+    return ' That is ' + t.toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' }) + ' your time.';
+  };
+  let earliest = '';
+  const showWhen = () => { mWhen.textContent = earliest + localNote(); };
+  const fillTimes = () => {
+    const keep = mTime.value;
+    mTime.textContent = '';
+    if (!mDate.value) mTime.add(new Option('Choose a date first', ''));
+    else {
+      const slots = freeSlots(mDate.value);
+      if (!slots.length) mTime.add(new Option(isSunday(mDate.value) ? 'Closed on Sundays, choose another day' : 'No times left, choose a later date', ''));
+      else {
+        mTime.add(new Option('Choose a time', ''));
+        slots.forEach(min => mTime.add(new Option(fmtTime(min), String(min))));
+        if (keep && slots.includes(+keep)) mTime.value = keep;
+      }
+    }
+    showWhen();
+  };
+  // Earliest date is 24 hours from now (in India time); latest is 60 days ahead.
+  const setLimits = () => {
+    const first = firstSlot();
+    mDate.min = first ? first[0] : istDate(Date.now() + LEAD);
+    mDate.max = istDate(Date.now() + 60 * DAY);
+    earliest = first ? 'Earliest slot: ' + fmtDate(first[0]) + ', ' + fmtTime(first[1]) + ' India time. We meet Monday to Saturday, 9:30 am to 6:30 pm.' : '';
+    if (mDate.value && (mDate.value < mDate.min || mDate.value > mDate.max)) mDate.value = '';
+    fillTimes();
+  };
+  mDate.addEventListener('change', fillTimes);
+  mDate.addEventListener('focus', setLimits);
+  mTime.addEventListener('change', showWhen);
+  mForm.addEventListener('change', e => {
+    if (e.target.name === 'm_type') mForm.querySelectorAll('.chips[aria-invalid]').forEach(c => c.removeAttribute('aria-invalid'));
+  });
+  setLimits();
+  mForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!validate(mForm, mNote, ['m-date', 'm-time', 'm-name', 'm-email', 'm-phone'], { m_type: 'What would you like' })) return;
+    if (slotMs(mDate.value, +mTime.value) < Date.now() + LEAD) {
+      setLimits();
+      mTime.setAttribute('aria-invalid', 'true');
+      showNote(mNote, 'That time is now less than 24 hours away. Please choose a later time.', true);
+      return;
+    }
+    const $m = id => document.getElementById(id).value.trim();
+    const type = mForm.querySelector('input[name="m_type"]:checked').value;
+    const what = type === 'Meeting' ? 'meeting' : 'trial session';
+    const slot = fmtDate(mDate.value) + ', ' + fmtTime(+mTime.value) + ' (India time)';
+    const pairs = [['Request', type === 'Meeting' ? 'Meet us (virtual meeting)' : 'Trial session'], ['Preferred time', slot], ['Full name', $m('m-name')], ['Email', $m('m-email')], ['Mobile', $m('m-phone')]];
+    if ($m('m-company')) pairs.push(['Company', $m('m-company')]);
+    if ($m('m-msg')) pairs.push(['To discuss', $m('m-msg')]);
+    sendLead(mForm, mNote, {
+      subject: (type === 'Meeting' ? 'Meeting' : 'Trial session') + ' request - ' + $m('m-name') + ' - ' + slot,
+      title: 'New ' + what + ' request (ElearnersForum website)',
+      pairs,
+      replyTo: $m('m-email'),
+      name: $m('m-name'),
+      thanks: 'Thank you. Your ' + what + ' request for ' + slot + ' has reached our team. We\'ll confirm by email and send you the video-call link.',
+      confirm: 'Thank you for requesting a ' + what + ' with ElearnersForum on ' + slot + '. We will confirm the time by email and send you the video-call link.',
     });
   });
 
