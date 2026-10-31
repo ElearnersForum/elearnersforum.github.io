@@ -388,6 +388,13 @@ td.dur { font-size: 14px; white-space: nowrap; font-variant-numeric: tabular-num
 .empty-state img { width: 72px; height: 72px; }
 .empty-state h2 { font-size: 26px; }
 .empty-state p { max-width: 52ch; }
+/* Clientele: one tile per client. A tile holds the client name now; an <img> logo can replace the name later. */
+.clients { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 900px) { .clients { grid-template-columns: repeat(3, 1fr); } }
+.client { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); min-height: 100px; padding: 16px; display: grid; place-items: center; text-align: center;
+  font-family: var(--font-display); font-stretch: condensed; font-weight: 700; font-size: 22px; line-height: 1.15; color: var(--ink); }
+.client img { max-width: 150px; max-height: 60px; object-fit: contain; }
+@media (max-width: 600px) { .clients { grid-template-columns: repeat(2, 1fr); gap: 10px; } .client { min-height: 84px; font-size: 19px; } }
 .quotes:empty { display: none; }
 .quote .ef-remove { justify-self: end; font: 700 13px var(--font-body); color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
 /* Up to three cards per row, centred, so the first one or two testimonials don't look lopsided */
@@ -998,6 +1005,13 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       <p class="label">Testimonials</p>
       <h1>Client and participant feedback</h1>
       <ul class="points"><li>Published only with the client's permission</li><li>Collected after each session and again 60–90 days later</li></ul>
+    </div>
+  </section>
+
+  <section class="band alt" id="clientele">
+    <div class="wrap">
+      <div class="section-head"><p class="label">Our clientele</p><h2>Organisations we've worked with</h2></div>
+      <ul class="clients"><li class="client">Unisys</li><li class="client">Adidas</li><li class="client">24/7</li><li class="client">UTCAS</li><li class="client">Titan EyePlus</li><li class="client">Tata GoldPlus</li><li class="client">Accenture</li><li class="client">Mantri Developers</li><li class="client">Bata</li><li class="client">Croma</li><li class="client">Reliance</li><li class="client">Carl Zeiss</li></ul>
     </div>
   </section>
 
