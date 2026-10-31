@@ -1218,7 +1218,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
         <ul class="points"><li>Takes about 3 minutes</li><li>We reply within 1 working day to book a discovery call</li><li>Your details are used only to prepare your proposal</li></ul>
         <div class="card" style="margin-top:12px">
           <h3>Other ways to reach us</h3>
-          <ul class="points" style="margin-top:12px"><li><a href="#meet">Book a trial session or meet us online</a></li><li><a data-link="quick" href="https://forms.gle/PwJdYoHa2Maqzc8v6" target="_blank" rel="noopener">Quick question? Send a short message</a></li><li><a href="#careers">Join us as a trainer</a></li></ul>
+          <ul class="points" style="margin-top:12px"><li><a href="#meet">Meet us online</a></li><li><a data-link="quick" href="https://forms.gle/PwJdYoHa2Maqzc8v6" target="_blank" rel="noopener">Quick question? Send a short message</a></li><li><a href="#careers">Join us as a trainer</a></li></ul>
         </div>
       </div>
 
@@ -1320,21 +1320,12 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     <div class="wrap enquiry-layout">
       <div class="section-head" style="margin-bottom:0">
         <p class="label">Meet us</p>
-        <h2>Book a trial session or a virtual meeting</h2>
-        <ul class="points"><li>A video call with our team, for your organisation or for yourself</li><li>Choose any slot from 24 hours ahead, Monday to Saturday</li><li>We confirm by email and send you the video-call link</li></ul>
+        <h2>Meet us online</h2>
+        <ul class="points"><li>A video call with our team to understand your training needs, for your organisation or for yourself</li><li>Choose any slot from 24 hours ahead, Monday to Saturday</li><li>We confirm by email and send you the video-call link</li></ul>
       </div>
       <div>
         <form class="card enquiry" id="meet-form" novalidate="">
           <div class="form-note" id="meet-note" role="status" tabindex="-1" hidden=""></div>
-          <fieldset>
-            <legend>What would you like?</legend>
-            <div class="field full">
-              <div class="chips" role="radiogroup" aria-label="What would you like?">
-                <label><input type="radio" name="m_type" value="Trial session">Trial session</label>
-                <label><input type="radio" name="m_type" value="Meeting">Meet us</label>
-              </div>
-            </div>
-          </fieldset>
           <fieldset>
             <legend>Choose a time</legend>
             <div class="field"><label for="m-date">Date <span class="req">*</span></label><input id="m-date" name="m_date" type="date" required=""></div>
@@ -1710,7 +1701,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     });
   });
 
-  // ---------- Meet us: request a trial session or virtual meeting, at least 24 hours ahead ----------
+  // ---------- Meet us: request a virtual meeting, at least 24 hours ahead ----------
   // Times are offered in India time (IST, UTC+5:30), Monday to Saturday, in 30-minute steps from 9:30 am to 6:00 pm.
   const mForm = document.getElementById('meet-form'), mNote = document.getElementById('meet-note');
   const mDate = document.getElementById('m-date'), mTime = document.getElementById('m-time'), mWhen = document.getElementById('m-when');
@@ -1761,13 +1752,10 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
   mDate.addEventListener('change', fillTimes);
   mDate.addEventListener('focus', setLimits);
   mTime.addEventListener('change', showWhen);
-  mForm.addEventListener('change', e => {
-    if (e.target.name === 'm_type') mForm.querySelectorAll('.chips[aria-invalid]').forEach(c => c.removeAttribute('aria-invalid'));
-  });
   setLimits();
   mForm.addEventListener('submit', e => {
     e.preventDefault();
-    if (!validate(mForm, mNote, ['m-date', 'm-time', 'm-name', 'm-email', 'm-phone'], { m_type: 'What would you like' })) return;
+    if (!validate(mForm, mNote, ['m-date', 'm-time', 'm-name', 'm-email', 'm-phone'])) return;
     if (slotMs(mDate.value, +mTime.value) < Date.now() + LEAD) {
       setLimits();
       mTime.setAttribute('aria-invalid', 'true');
@@ -1775,7 +1763,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       return;
     }
     const $m = id => document.getElementById(id).value.trim();
-    const type = mForm.querySelector('input[name="m_type"]:checked').value;
+    const type = 'Meeting';
     const what = type === 'Meeting' ? 'meeting' : 'trial session';
     const slot = fmtDate(mDate.value) + ', ' + fmtTime(+mTime.value) + ' (India time)';
     const pairs = [['Request', type === 'Meeting' ? 'Meet us (virtual meeting)' : 'Trial session'], ['Preferred time', slot], ['Full name', $m('m-name')], ['Email', $m('m-email')], ['Mobile', $m('m-phone')]];
