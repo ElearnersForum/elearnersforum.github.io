@@ -1651,14 +1651,15 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
   };
   // Emails the answers to our inbox through FormSubmit (a free form-to-email service), then offers WhatsApp in one tap.
   // If the email service can't be reached, the visitor sends them by WhatsApp or from their own email app instead.
-  const sendLead = async (f, box, { subject, title, pairs, replyTo, name, thanks, confirm }) => {
+  const sendLead = async (f, box, { subject, title, pairs, replyTo, name, thanks, confirm, teamOnly }) => {
     const text = title + '\n\n' + pairs.map(([k, v]) => k + ': ' + v).join('\n');
     // FormSubmit also emails the visitor an automatic confirmation (to the "email" field) with a copy of their answers.
     const phone = (document.querySelector('[data-kind="phone"]')?.textContent || '').trim();
     const confirmation = 'Dear ' + name + ',\n\n' + confirm + '\n\nHere is a copy of what you sent us:\n' +
       pairs.map(([k, v]) => '• ' + k + ': ' + v).join('\n') +
       '\n\nIf anything needs changing, write to ' + leadEmail() + (waNumber() && phone ? ' or WhatsApp us on ' + phone : '') + '.\n\nTeam ElearnersForum';
-    const fields = Object.fromEntries(pairs.filter(([, v]) => v !== replyTo));
+    // teamOnly fields (such as the Google Calendar link) go only into our email, not the visitor's copy.
+    const fields = { ...Object.fromEntries(pairs.filter(([, v]) => v !== replyTo)), ...(teamOnly || {}) };
     const submit = f.querySelector('button[type="submit"]');
     submit.disabled = true;
     showNote(box, 'Sending…', false);
@@ -1780,6 +1781,14 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     const pairs = [['Request', type === 'Meeting' ? 'Meet us (virtual meeting)' : 'Trial session'], ['Preferred time', slot], ['Full name', $m('m-name')], ['Email', $m('m-email')], ['Mobile', $m('m-phone')]];
     if ($m('m-company')) pairs.push(['Company', $m('m-company')]);
     if ($m('m-msg')) pairs.push(['To discuss', $m('m-msg')]);
+    // A one-tap link in our email that opens Google Calendar with this meeting filled in (60 minutes, the visitor as guest).
+    // Saving it there sends the visitor a calendar invite; Google adds a Meet link to events with guests.
+    const start = slotMs(mDate.value, +mTime.value), stamp = ms => new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+    const calUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+      '&text=' + encodeURIComponent((type === 'Meeting' ? 'ElearnersForum meeting' : 'ElearnersForum trial session') + ' with ' + $m('m-name') + ($m('m-company') ? ', ' + $m('m-company') : '')) +
+      '&dates=' + stamp(start) + '/' + stamp(start + 60 * 60000) + '&ctz=Asia/Kolkata' +
+      '&details=' + encodeURIComponent(pairs.map(([k, v]) => k + ': ' + v).join('\n')) +
+      '&add=' + encodeURIComponent($m('m-email'));
     sendLead(mForm, mNote, {
       subject: (type === 'Meeting' ? 'Meeting' : 'Trial session') + ' request - ' + $m('m-name') + ' - ' + slot,
       title: 'New ' + what + ' request (ElearnersForum website)',
@@ -1788,6 +1797,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       name: $m('m-name'),
       thanks: 'Thank you. Your ' + what + ' request for ' + slot + ' has reached our team. We\'ll confirm by email and send you the video-call link.',
       confirm: 'Thank you for requesting a ' + what + ' with ElearnersForum on ' + slot + '. We will confirm the time by email and send you the video-call link.',
+      teamOnly: { 'Add to Google Calendar': calUrl },
     });
   });
 
