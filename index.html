@@ -292,6 +292,8 @@ section.band.alt { background: radial-gradient(ellipse at 85% 0%, rgba(96, 165, 
 .program details { margin-top: auto; padding-top: 8px; border-top: 1px solid var(--line); }
 .program summary { cursor: pointer; font-weight: 700; font-size: 15px; padding-block: 10px; color: var(--accent); }
 .program details ul { margin: 10px 0 0; padding-left: 18px; font-size: 15px; display: grid; gap: 4px; }
+.program details ul.retail-list { gap: 10px; }
+.retail-list .meta { display: block; font-size: 13.5px; color: var(--muted); }
 @media (max-width: 1000px) { .programs, .programs.four { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px) { .programs, .programs.four { grid-template-columns: 1fr; } }
 .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
@@ -622,8 +624,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
           <a class="btn btn-ghost" href="#programs">Explore Programs</a>
         </div>
         <div class="hero-stats">
-          <div><strong>11</strong><span>program families</span></div>
-          <div><strong>64</strong><span>training modules</span></div>
+          <div><strong>19</strong><span>program families</span></div>
+          <div><strong>92</strong><span>training modules</span></div>
           <div><strong>7</strong><span>career-stage journeys</span></div>
         </div>
       </div>
@@ -655,8 +657,9 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
           <li>Process improvement, Quality and Operations</li>
           <li>HR processes, Culture, Wellbeing and Compliance Awareness</li>
           <li>IELTS Coaching for study, Work and Migration</li>
+          <li>Retail: customer experience, store safety, loss prevention and store leadership</li>
         </ul>
-        <a class="more" href="#programs">See all 11 program families →</a>
+        <a class="more" href="#programs">See all 19 program families →</a>
       </div>
     </div>
   </section>
@@ -683,7 +686,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     <div class="wrap">
       <div class="section-head">
         <p class="label">Career-stage journeys</p>
-        <h2>A learning journey for every step of a career</h2>
+        <h2>A learning journey for every step of your Career</h2>
         <ul class="points"><li>Each journey runs one to six months, with workshops, coaching and a real project</li></ul>
       </div>
       <ol class="ladder">
@@ -707,7 +710,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       <div class="grid-2">
         <div class="card win">
           <p class="label" style="color:var(--accent)">For your organisation</p>
-          <h3>Stronger business</h3>
+          <h3>Stronger Business</h3>
           <ul class="points"><li>Leaders who Coach and Delegate</li><li>Higher Engagement and Retention</li><li>Leaner processes, fewer errors</li><li>Happier, returning customers</li><li>Impact measured and reported</li></ul>
         </div>
         <div class="card win dark night-bg">
@@ -772,14 +775,14 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     <img class="page-hero-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPjxkZWZzPgo8cmFkaWFsR3JhZGllbnQgaWQ9ImJnIiBjeD0iNTAlIiBjeT0iNDUlIiByPSI3NSUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzEzMkI2QiIvPjxzdG9wIG9mZnNldD0iMC41NSIgc3RvcC1jb2xvcj0iIzA4MTQzNiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAzMDcxNiIvPjwvcmFkaWFsR3JhZGllbnQ+CjxwYXR0ZXJuIGlkPSJkb3RzIiB3aWR0aD0iMjgiIGhlaWdodD0iMjgiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxLjYiIGZpbGw9IiM2MEE1RkEiIG9wYWNpdHk9IjAuMTgiLz48L3BhdHRlcm4+CjwvZGVmcz4KPGRlZnM+PGZpbHRlciBpZD0iZ2kiIHg9Ii00MCUiIHk9Ii00MCUiIHdpZHRoPSIxODAlIiBoZWlnaHQ9IjE4MCUiIGNvbG9yLWludGVycG9sYXRpb24tZmlsdGVycz0ic1JHQiI+CjxmZUZsb29kIGZsb29kLWNvbG9yPSIjMjU2M0VCIiByZXN1bHQ9ImMxIi8+PGZlQ29tcG9zaXRlIGluPSJjMSIgaW4yPSJTb3VyY2VBbHBoYSIgb3BlcmF0b3I9ImluIiByZXN1bHQ9InMxIi8+CjxmZUdhdXNzaWFuQmx1ciBpbj0iczEiIHN0ZERldmlhdGlvbj0iNDAiIHJlc3VsdD0iZzEiLz4KPGZlRmxvb2QgZmxvb2QtY29sb3I9IiNCQUU2RkQiIHJlc3VsdD0iYzIiLz48ZmVDb21wb3NpdGUgaW49ImMyIiBpbjI9IlNvdXJjZUFscGhhIiBvcGVyYXRvcj0iaW4iIHJlc3VsdD0iczIiLz4KPGZlR2F1c3NpYW5CbHVyIGluPSJzMiIgc3RkRGV2aWF0aW9uPSIxMiIgcmVzdWx0PSJnMiIvPgo8ZmVNZXJnZT48ZmVNZXJnZU5vZGUgaW49ImcxIi8+PGZlTWVyZ2VOb2RlIGluPSJnMSIvPjxmZU1lcmdlTm9kZSBpbj0iZzIiLz48ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz48L2ZlTWVyZ2U+CjwvZmlsdGVyPjwvZGVmcz48ZyBmaWx0ZXI9InVybCgjZ2kpIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNjAuMCAyMTQuMCkgc2NhbGUoNC40KSI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImlscCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNFRkY2RkYiLz4KPHN0b3Agb2Zmc2V0PSIwLjUiIHN0b3AtY29sb3I9IiM5M0M1RkQiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjM0I4MkY2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0iaXJwIiB4MT0iMSIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0RCRUFGRSIvPgo8c3RvcCBvZmZzZXQ9IjAuNSIgc3RvcC1jb2xvcj0iIzYwQTVGQSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxRDRFRDgiLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJpY3YiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMjU2M0VCIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzBCMUU1QiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImlsZiIgeDE9IjAiIHkxPSIxIiB4Mj0iMSIgeTI9IjAiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxRTNBOEEiLz4KPHN0b3Agb2Zmc2V0PSIwLjU1IiBzdG9wLWNvbG9yPSIjMjU2M0VCIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzkzQzVGRCIvPgo8L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9ImlzbCIgeDE9IjEiIHkxPSIxIiB4Mj0iMCIgeTI9IjAiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxRDRFRDgiLz4KPHN0b3Agb2Zmc2V0PSIwLjUiIHN0b3AtY29sb3I9IiM2MEE1RkEiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjREJFQUZFIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0iaWdsIiB4MT0iMCIgeTE9IjAiIHgyPSIwIiB5Mj0iMSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0ZGRkZGRiIgc3RvcC1vcGFjaXR5PSIwLjk1Ii8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0ZGRkZGRiIgc3RvcC1vcGFjaXR5PSIwIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxyYWRpYWxHcmFkaWVudCBpZD0iaXNoIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwQjFFNUIiIHN0b3Atb3BhY2l0eT0iMC4zNSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwQjFFNUIiIHN0b3Atb3BhY2l0eT0iMCIvPgo8L3JhZGlhbEdyYWRpZW50Pgo8L2RlZnM+Cgo8cGF0aCBkPSJNMTIgMTEwIEMzNiAxMDQgNjIgMTA2IDgwIDExNiBMODAgMTI1IEM2MiAxMTUgMzYgMTEzIDEwIDExOSBaIiBmaWxsPSJ1cmwoI2ljdikiLz4KPHBhdGggZD0iTTE0OCAxMTAgQzEyNCAxMDQgOTggMTA2IDgwIDExNiBMODAgMTI1IEM5OCAxMTUgMTI0IDExMyAxNTAgMTE5IFoiIGZpbGw9InVybCgjaWN2KSIvPgo8cGF0aCBkPSJNODAgNzQgQzY0IDY0IDQwIDYyIDE2IDY4IEwxMiAxMTAgQzM2IDEwNCA2MiAxMDYgODAgMTE2IFoiIGZpbGw9InVybCgjaWxwKSIvPgo8cGF0aCBkPSJNODAgNzQgQzk2IDY0IDEyMCA2MiAxNDQgNjggTDE0OCAxMTAgQzEyNCAxMDQgOTggMTA2IDgwIDExNiBaIiBmaWxsPSJ1cmwoI2lycCkiLz4KPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utb3BhY2l0eT0iMC42IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CjxwYXRoIGQ9Ik0yNiA3OSBDNDIgNzQgNTggNzUgNzIgODIiLz4KPHBhdGggZD0iTTI1IDg5IEM0MSA4NCA1NyA4NSA3MiA5MiIvPgo8cGF0aCBkPSJNMjQgOTkgQzQwIDk0IDU2IDk1IDcyIDEwMiIvPgo8cGF0aCBkPSJNMTM0IDc5IEMxMTggNzQgMTAyIDc1IDg4IDgyIi8+CjxwYXRoIGQ9Ik0xMzUgODkgQzExOSA4NCAxMDMgODUgODggOTIiLz4KPHBhdGggZD0iTTEzNiA5OSBDMTIwIDk0IDEwNCA5NSA4OCAxMDIiLz4KPC9nPgo8cGF0aCBkPSJNMjAgNzAgQzQwIDY1IDYyIDY3IDc3IDc2IEw3NiA4MCBDNjAgNzIgNDAgNzAgMTkgNzQgWiIgZmlsbD0idXJsKCNpZ2wpIi8+CjxwYXRoIGQ9Ik0xNDAgNzAgQzEyMCA2NSA5OCA2NyA4MyA3NiBMODQgODAgQzEwMCA3MiAxMjAgNzAgMTQxIDc0IFoiIGZpbGw9InVybCgjaWdsKSIgb3BhY2l0eT0iMC42Ii8+CjxwYXRoIGQ9Ik0xNCAxMTEgQzM4IDEwNSA2MiAxMDcgNzkgMTE3IiBmaWxsPSJub25lIiBzdHJva2U9IiM5M0M1RkQiIHN0cm9rZS13aWR0aD0iMS4yIiBzdHJva2Utb3BhY2l0eT0iMC44Ii8+CjxwYXRoIGQ9Ik0xNDYgMTExIEMxMjIgMTA1IDk4IDEwNyA4MSAxMTciIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzkzQzVGRCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1vcGFjaXR5PSIwLjYiLz4KPGxpbmUgeDE9IjgwIiB5MT0iNzQiIHgyPSI4MCIgeTI9IjExNiIgc3Ryb2tlPSIjMUUzQThBIiBzdHJva2Utd2lkdGg9IjEuNiIvPgo8cGF0aCBkPSJNODAgNzYgQzgwIDYyIDc5IDUyIDgzIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMxRDRFRDgiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxwYXRoIGQ9Ik04MCA1NiBDNzEgNDQgNTYgMzggNDAgNDAgQzQ0IDU0IDYwIDYwIDgwIDU2IFoiIGZpbGw9InVybCgjaXNsKSIvPgo8cGF0aCBkPSJNODMgNDIgQzg2IDIwIDEwNiA4IDEyOCA2IEMxMjYgMjggMTEwIDQ0IDgzIDQyIFoiIGZpbGw9InVybCgjaWxmKSIvPgo8ZyBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIwLjYiIHN0cm9rZS13aWR0aD0iMS42IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgo8cGF0aCBkPSJNNzcgNTQgQzY2IDQ4IDU0IDQ0IDQ0IDQyIi8+CjxwYXRoIGQ9Ik04NiA0MCBDOTggMzAgMTEwIDIwIDEyMiAxMSIvPgo8L2c+CjxlbGxpcHNlIGN4PSIxMTAiIGN5PSIxOCIgcng9IjEwIiByeT0iMy41IiB0cmFuc2Zvcm09InJvdGF0ZSgtMzggMTEwIDE4KSIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC43NSIvPgo8ZWxsaXBzZSBjeD0iNTQiIGN5PSI0NCIgcng9IjciIHJ5PSIyLjUiIHRyYW5zZm9ybT0icm90YXRlKDE2IDU0IDQ0KSIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC43Ii8+CjxjaXJjbGUgY3g9IjEyNSIgY3k9IjkiIHI9IjEuNiIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45Ii8+CjwvZz48L2c+PC9zdmc+" alt="" aria-hidden="true">
     <div class="wrap">
       <p class="label">Programs</p>
-      <h1>Eleven program families, built from 64 modules</h1>
-      <ul class="points"><li>Half-day or full-day workshops, or 90-minute virtual sessions</li><li>Modules combine into programs that fit your goals</li><li>People development, process development and IELTS coaching</li></ul>
+      <h1>Nineteen program families, built from 92 modules</h1>
+      <ul class="points"><li>Half-day or full-day workshops, or 90-minute virtual sessions</li><li>Modules combine into programs that fit your goals</li><li>People development, process development, IELTS coaching and retail training</li></ul>
     </div>
   </section>
 
   <section class="band">
     <div class="wrap">
-      <div class="track-title"><h2>People development</h2><span class="label">6 families · 37 modules</span></div>
+      <div class="track-title"><h2>People development</h2><span class="label">6 families · 39 modules</span></div>
       <div class="programs">
         <article class="program" data-family="lead"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20l6-10 4 6 2-3 4 7z"></path><path d="M10 10V3l5 2-5 2"></path></svg></span><span class="num">01 · 9 modules</span></div><h3>Leadership &amp; Management</h3><p>From first-time managers to executives who lead change.</p>
           <details><summary>See modules</summary><ul><li>First-time manager essentials</li><li>Situational leadership</li><li>Delegation and accountability</li><li>Coaching and mentoring for managers</li><li>Giving and receiving feedback</li><li>Leading change</li><li>Strategic thinking and decision making</li><li>Leading remote and hybrid teams</li><li>Executive presence and influence</li></ul></details></article>
@@ -791,8 +794,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
           <details><summary>See modules</summary><ul><li>Emotional intelligence at work</li><li>Stress management and resilience</li><li>Work-life integration</li><li>Mindfulness for performance</li><li>Mental health awareness for managers</li></ul></details></article>
         <article class="program" data-family="team"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"></circle><circle cx="16" cy="8" r="3"></circle><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path><path d="M14 14.3A6 6 0 0 1 22 20"></path></svg></span><span class="num">05 · 6 modules</span></div><h3>Teamwork, Collaboration &amp; Culture</h3><p>Teams that trust each other, resolve conflict and include everyone.</p>
           <details><summary>See modules</summary><ul><li>High-performing teams</li><li>Conflict management and difficult conversations</li><li>Negotiation skills</li><li>Diversity, equity and inclusion</li><li>Building a culture of trust and ownership</li><li>POSH and workplace ethics awareness</li></ul></details></article>
-        <article class="program" data-family="sales"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path></svg></span><span class="num">06 · 5 modules</span></div><h3>Sales, Service &amp; Customer Experience</h3><p>Consultative selling and service that keeps customers coming back.</p>
-          <details><summary>See modules</summary><ul><li>Consultative and solution selling</li><li>Key account management</li><li>Customer service excellence</li><li>Handling complaints and difficult customers</li><li>Customer experience and journey mapping</li></ul></details></article>
+        <article class="program" data-family="sales"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path></svg></span><span class="num">06 · 7 modules</span></div><h3>Sales, Service &amp; Customer Experience</h3><p>Consultative selling and service that keeps customers coming back.</p>
+          <details><summary>See modules</summary><ul><li>Consultative and Solution selling</li><li>Luxury Selling</li><li>Key Account Management</li><li>Customer service excellence</li><li>Handling complaints and difficult customers</li><li>Customer experience and journey mapping</li><li>Increase sales with satisfaction</li></ul></details></article>
       </div>
 
       <div class="track-title"><h2>Process development</h2><span class="label">4 families · 21 modules</span></div>
@@ -816,6 +819,26 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
           <ul class="points" style="margin-top:12px"><li>Employees moving abroad for work or study</li><li>Companies sponsoring staff for overseas roles</li><li>Individuals preparing for their own test</li><li>Classroom or live online, weekday and weekend batches</li></ul>
           <a class="more" href="#enquiry">Enquire about IELTS coaching →</a>
         </div>
+      </div>
+      <div class="track-title" id="retail" style="margin-top:48px"><h2>Retail training</h2><span class="label">8 families · 26 modules</span></div>
+      <p class="lead" style="margin-bottom:18px">Programs for store teams, supervisors and head-office staff, built around what retailers need today.</p>
+      <div class="programs">
+        <article class="program" data-family="retail-cx"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7z"></path><path d="M9 7a3 3 0 0 1 6 0"></path></svg></span><span class="num">12 · 4 modules</span></div><h3>Retail Customer Experience</h3><p>Service and selling skills that keep shoppers coming back and raise basket size.</p>
+          <details><summary>See modules</summary><ul class="retail-list"><li>Customer service excellence<span class="meta">Sales associates · Half-day workshop</span></li><li>Upselling and cross-selling<span class="meta">Sales associates · Half-day workshop with role-play</span></li><li>Consultative selling and clienteling<span class="meta">Senior associates, luxury and specialist stores · 1-day workshop</span></li><li>Product knowledge programs<span class="meta">New and seasonal staff · Short modules</span></li></ul></details></article>
+        <article class="program" data-family="retail-safety"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg></span><span class="num">13 · 3 modules</span></div><h3>Store Safety</h3><p>De-escalation, incident response and safe ways of working on the shop floor.</p>
+          <details><summary>See modules</summary><ul class="retail-list"><li>Conflict de-escalation<span class="meta">All store staff · Half-day workshop with scenarios</span></li><li>Personal safety and incident response<span class="meta">All store staff, especially night and solo shifts · 2-hour session</span></li><li>Workplace health and safety<span class="meta">Stock and warehouse teams · Short modules</span></li></ul></details></article>
+        <article class="program" data-family="retail-loss"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span><span class="num">14 · 3 modules</span></div><h3>Loss Prevention</h3><p>Spot theft and fraud early and keep stock records accurate.</p>
+          <details><summary>See modules</summary><ul class="retail-list"><li>Shoplifting awareness<span class="meta">Shop-floor staff · 2-hour session</span></li><li>Payment and refund fraud awareness<span class="meta">Cashiers and customer service desk · 1–2 hour session</span></li><li>Shrink and stock accuracy<span class="meta">Supervisors and stock teams · Half-day workshop</span></li></ul></details></article>
+        <article class="program" data-family="retail-omni"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"></rect><path d="M11 18h2"></path></svg></span><span class="num">15 · 3 modules</span></div><h3>Omnichannel Retail</h3><p>Handle online orders, returns and in-store technology with confidence.</p>
+          <details><summary>See modules</summary><ul class="retail-list"><li>Click-and-collect and ship-from-store<span class="meta">Store and fulfilment staff · Short modules with on-the-job practice</span></li><li>In-store retail technology<span class="meta">All store staff · Hands-on session</span></li><li>Omnichannel returns handling<span class="meta">Customer service desk · 1–2 hour session</span></li></ul></details></article>
+        <article class="program" data-family="retail-ai"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V11"></path><path d="M10 20V5"></path><path d="M16 20v-6"></path><path d="M21 20H3"></path></svg></span><span class="num">16 · 3 modules</span></div><h3>AI and Data for Retail</h3><p>Practical AI and data skills for store managers and head-office teams.</p>
+          <details><summary>See modules</summary><ul class="retail-list"><li>AI tools for retail teams<span class="meta">Managers and head-office staff · 1-day workshop</span></li><li>Data literacy and sales dashboards<span class="meta">Store managers and supervisors · Half-day workshop</span></li><li>Generative AI for marketing and content<span class="meta">Marketing and e-commerce teams · 1-day workshop</span></li></ul></details></article>
+        <article class="program" data-family="retail-lead"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"></circle><path d="M5 21c1-4 4-6 7-6s6 2 7 6"></path></svg></span><span class="num">17 · 4 modules</span></div><h3>Retail Leadership</h3><p>Confident supervisors and store managers who coach, plan and run lean stores.</p>
+          <details><summary>See modules</summary><ul class="retail-list"><li>First-time supervisor program<span class="meta">Newly promoted supervisors · 4–6 short sessions</span></li><li>Store manager development<span class="meta">Store and assistant managers · Multi-week program</span></li><li>Coaching and feedback skills<span class="meta">Supervisors and managers · Half-day workshop</span></li><li>Labour scheduling and productivity<span class="meta">Store managers · Half-day workshop</span></li></ul></details></article>
+        <article class="program" data-family="retail-comp"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 4h6v3H9z"></path><path d="M9 13l2 2 4-4"></path></svg></span><span class="num">18 · 3 modules</span></div><h3>Retail Compliance</h3><p>Meet legal requirements and serve every customer fairly.</p>
+          <details><summary>See modules</summary><ul class="retail-list"><li>Harassment prevention and bystander training<span class="meta">All staff · 1–2 hour session</span></li><li>Diversity, inclusion and accessible service<span class="meta">All staff · 1–2 hour session</span></li><li>Regulatory compliance: food safety, age-restricted sales, data privacy, payment-card security<span class="meta">Relevant staff · Short modules</span></li></ul></details></article>
+        <article class="program" data-family="retail-spec"><div class="program-top"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6-4.5-4.1 6-.7z"></path></svg></span><span class="num">19 · 3 modules</span></div><h3>Specialist Retail Skills</h3><p>Merchandising, sustainability and workplace English for retail teams.</p>
+          <details><summary>See modules</summary><ul class="retail-list"><li>Visual merchandising<span class="meta">Merchandisers and store staff · 1-day workshop</span></li><li>Sustainability and circular retail<span class="meta">Store and head-office teams · Short workshop</span></li><li>Business English and workplace communication<span class="meta">Multinational and multilingual teams · Weekly sessions over 6–8 weeks</span></li></ul></details></article>
       </div>
     </div>
   </section>
@@ -1282,6 +1305,18 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
                     <label><input type="checkbox" name="areas" value="IELTS Coaching" data-family="ielts" id="f-area-ielts">IELTS Coaching</label>
                   </div>
                 </div>
+                <div class="chip-group"><span class="sub" id="g-retail">Retail training</span>
+                  <div class="chips" role="group" aria-labelledby="g-retail">
+                    <label><input type="checkbox" name="areas" value="Retail Customer Experience" data-family="retail-cx">Customer Experience</label>
+                    <label><input type="checkbox" name="areas" value="Store Safety" data-family="retail-safety">Store Safety</label>
+                    <label><input type="checkbox" name="areas" value="Loss Prevention" data-family="retail-loss">Loss Prevention</label>
+                    <label><input type="checkbox" name="areas" value="Omnichannel Retail" data-family="retail-omni">Omnichannel</label>
+                    <label><input type="checkbox" name="areas" value="AI and Data for Retail" data-family="retail-ai">AI and Data</label>
+                    <label><input type="checkbox" name="areas" value="Retail Leadership" data-family="retail-lead">Retail Leadership</label>
+                    <label><input type="checkbox" name="areas" value="Retail Compliance" data-family="retail-comp">Compliance</label>
+                    <label><input type="checkbox" name="areas" value="Specialist Retail Skills" data-family="retail-spec">Specialist Skills</label>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- One "which program?" dropdown per ticked area, filled from that area's modules on the Programs page -->
@@ -1580,7 +1615,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       const select = document.createElement('select');
       select.id = 'f-prog-' + key; select.name = 'program_' + key; select.dataset.family = key; select.dataset.mailLabel = title + ' program';
       select.add(new Option('Choose a program', ''));
-      card.querySelectorAll('details li').forEach(li => select.add(new Option(li.textContent.trim())));
+      card.querySelectorAll('details li').forEach(li => select.add(new Option((li.firstChild && li.firstChild.nodeType === 3 ? li.firstChild.textContent : li.textContent).trim())));
       select.add(new Option('All of ' + title + ' (a full program)'));
       select.add(new Option('Not sure yet, please advise'));
       if (chosen.has(key)) select.value = chosen.get(key);
