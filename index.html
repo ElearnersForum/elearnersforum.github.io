@@ -573,8 +573,14 @@ body.ef-resizing #ef-root * { cursor: pointer; }
 .ef-rs { display: grid; gap: 10px; max-width: 640px; }
 .ef-rs .ef-row { gap: 6px; }
 .ef-rs-lab { font-weight: 700; font-size: 13.5px; min-width: 52px; }
+.ef-rs .ef-row .ef-rs-lab:not(:first-child) { margin-left: 10px; }
+.ef-bar { max-height: 62vh; overflow-y: auto; }
+body.ef-resizing { padding-bottom: 70vh; }
+body.ef-resizing .ef-hint { display: none; }
 .ef-rs-val { min-width: 54px; text-align: center; font-size: 13.5px; color: var(--muted); }
 .ef-btn.ef-sm { padding: 6px 14px; font-size: 14px; }
+.ef-btn.ef-sm[aria-pressed="true"] { background: var(--ice); border-color: var(--accent); }
+.ef-rs-sel { font: 14px var(--font-body); padding: 6px 8px; border: 1px solid var(--field-line); border-radius: 8px; background: var(--bg); color: var(--ink); max-width: 210px; }
 .ef-mail { font-size: 13.5px; color: var(--muted); }
 body.ef-editing .ef-mail { display: none; }
 .ef-msg { font-size: 14.5px; margin: 0; max-width: 46ch; }
@@ -585,8 +591,10 @@ body.ef-editing [contenteditable="true"] { outline: 1px dashed var(--sky); outli
 body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-width: 2px; }
 </style>
 <style id="ef-theme"></style>
+<style id="ef-fonts"></style>
 </head>
 <body>
+
 
 
 
@@ -661,13 +669,13 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       <div class="card">
         <h3 style="zoom: 1.05;">We Train</h3>
         <ul class="plain cols" style="zoom: 0.95;">
-          <li class="" style="zoom: 0.95;">Leadership and Management at every level</li>
-          <li class="" style="zoom: 0.95;">Communication, Behavioural and Soft Skills</li>
-          <li class="" style="zoom: 0.95;">Sales, Service and Customer experience</li>
-          <li class="" style="zoom: 0.95;">Process improvement, Quality and Operations</li>
-          <li class="" style="zoom: 0.95;">HR processes, Culture, Wellbeing and Compliance Awareness</li>
-          <li class="" style="zoom: 0.95;">IELTS Coaching for study, Work and Migration</li>
-          <li class="" style="zoom: 0.95;">Retail: customer experience, store safety, loss prevention and store leadership</li>
+          <li style="zoom: 0.95;">Leadership and Management at every level</li>
+          <li style="zoom: 0.95;">Communication, Behavioural and Soft Skills</li>
+          <li style="zoom: 0.95;">Sales, Service and Customer experience</li>
+          <li style="zoom: 0.95;">Process improvement, Quality and Operations</li>
+          <li style="zoom: 0.95;">HR processes, Culture, Wellbeing and Compliance Awareness</li>
+          <li style="zoom: 0.95;">IELTS Coaching for study, Work and Migration</li>
+          <li style="zoom: 0.95;">Retail: customer experience, store safety, loss prevention and store leadership</li>
         </ul>
         <a class="more" href="#programs">See all 19 program families →</a>
       </div>
@@ -679,7 +687,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       <div class="section-head">
         <p class="label">How learning sticks</p>
         <h2 style="zoom: 1.05; width: 90%; max-width: 100%;">We design every program on the 70:20:10 model</h2>
-        <ul class="points"><li class="" style="zoom: 0.9;">Most learning at work happens on the job and from other people</li><li class="" style="zoom: 0.9; width: 85%; max-width: 100%;">Every program builds in practice and coaching, not just workshops</li></ul>
+        <ul class="points"><li style="zoom: 0.9;">Most learning at work happens on the job and from other people</li><li style="zoom: 0.9; width: 85%; max-width: 100%;">Every program builds in practice and coaching, not just workshops</li></ul>
       </div>
       <div class="card" role="img" aria-label="70 percent on the job, 20 percent from others, 10 percent formal training">
         <div class="bar"><div class="b70">70%</div><div class="b20">20%</div><div class="b10">10%</div></div>
@@ -1425,7 +1433,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       <button type="button" class="ef-btn" id="ef-add-quote">Add testimonial</button>
       <button type="button" class="ef-btn" id="ef-links-toggle" aria-expanded="false">Links</button>
       <button type="button" class="ef-btn" id="ef-cloud-toggle" aria-expanded="false">Word cloud</button>
-      <button type="button" class="ef-btn" id="ef-resize-toggle" aria-pressed="false">Resize</button>
+      <button type="button" class="ef-btn" id="ef-resize-toggle" aria-pressed="false">Resize &amp; style</button>
       <button type="button" class="ef-btn" id="ef-cancel">Discard</button>
       <button type="button" class="ef-btn ef-main" id="ef-save">Save changes</button>
     </div>
@@ -1444,10 +1452,12 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     </div>
     <div class="ef-rs" id="ef-resize" hidden="" style="margin-top:10px">
       <span class="ef-note" id="ef-rs-what">Tap any box, heading or text on the page to select it.</span>
-      <div class="ef-row"><span class="ef-rs-lab">Size</span><button type="button" class="ef-btn ef-sm" data-rs="zoom:-1" aria-label="Smaller">A−</button><span class="ef-rs-val" id="ef-rs-zoom">–</span><button type="button" class="ef-btn ef-sm" data-rs="zoom:1" aria-label="Bigger">A+</button></div>
-      <div class="ef-row"><span class="ef-rs-lab">Width</span><button type="button" class="ef-btn ef-sm" data-rs="width:-1" aria-label="Narrower">−</button><span class="ef-rs-val" id="ef-rs-width">–</span><button type="button" class="ef-btn ef-sm" data-rs="width:1" aria-label="Wider">+</button></div>
-      <div class="ef-row"><span class="ef-rs-lab">Height</span><button type="button" class="ef-btn ef-sm" data-rs="height:-1" aria-label="Shorter">−</button><span class="ef-rs-val" id="ef-rs-height">–</span><button type="button" class="ef-btn ef-sm" data-rs="height:1" aria-label="Taller">+</button></div>
+      <div class="ef-row"><span class="ef-rs-lab">Size</span><button type="button" class="ef-btn ef-sm" data-rs="zoom:-1" aria-label="Smaller">A−</button><span class="ef-rs-val" id="ef-rs-zoom">–</span><button type="button" class="ef-btn ef-sm" data-rs="zoom:1" aria-label="Bigger">A+</button><span class="ef-rs-lab">Width</span><button type="button" class="ef-btn ef-sm" data-rs="width:-1" aria-label="Narrower">−</button><span class="ef-rs-val" id="ef-rs-width">–</span><button type="button" class="ef-btn ef-sm" data-rs="width:1" aria-label="Wider">+</button><span class="ef-rs-lab">Height</span><button type="button" class="ef-btn ef-sm" data-rs="height:-1" aria-label="Shorter">−</button><span class="ef-rs-val" id="ef-rs-height">–</span><button type="button" class="ef-btn ef-sm" data-rs="height:1" aria-label="Taller">+</button></div>
+      <div class="ef-row"><span class="ef-rs-lab">Font</span><select class="ef-rs-sel" id="ef-st-font" data-st="font" aria-label="Font for this item"></select><span class="ef-rs-lab">Style</span><button type="button" class="ef-btn ef-sm" data-st="bold" aria-pressed="false" aria-label="Bold"><b>B</b></button><button type="button" class="ef-btn ef-sm" data-st="italic" aria-pressed="false" aria-label="Italic"><i>I</i></button><button type="button" class="ef-btn ef-sm" data-st="underline" aria-pressed="false" aria-label="Underline"><u>U</u></button></div>
+      <div class="ef-row"><span class="ef-rs-lab">Colours</span><label class="ef-color">Text <input type="color" id="ef-st-color" data-st="color"></label><button type="button" class="ef-btn ef-sm" data-st="color-reset">Default</button><label class="ef-color">Background <input type="color" id="ef-st-bg" data-st="bg"></label><button type="button" class="ef-btn ef-sm" data-st="bg-reset">None</button></div>
       <div class="ef-row"><button type="button" class="ef-btn ef-sm" data-rs="outer">Select the box around it</button><button type="button" class="ef-btn ef-sm" data-rs="reset">Reset this item</button></div>
+      <span class="ef-note" style="margin-top:4px">Fonts for the whole site</span>
+      <div class="ef-row"><label class="ef-color">Headings <select class="ef-rs-sel" id="ef-gf-display"></select></label><label class="ef-color">Text <select class="ef-rs-sel" id="ef-gf-body"></select></label></div>
     </div>
     <input type="file" id="ef-media-input" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,audio/*" hidden="">
   </div>
@@ -2139,6 +2149,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       syncQuotes();
       themeCss = savedTheme; themeTag.textContent = savedTheme; resetPickers();
       fillLinks(CONFIG); $('ef-links').hidden = true;
+      rsRevert();
       setMode(false); say('Changes discarded.');
     });
     // While editing, links inside the page content don't navigate (so you can click their text); the menus still do.
@@ -2221,9 +2232,10 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       $('ef-rs-zoom').textContent = rsSel ? Math.round(rsZoom(rsSel) * 100) + '%' : '–';
       $('ef-rs-width').textContent = rsSel ? (rsWidthSet(rsSel) ? rsWidthSet(rsSel) + '%' : 'Auto') : '–';
       $('ef-rs-height').textContent = rsSel ? (rsSel.style.minHeight || 'Auto') : '–';
-      rsPanel.querySelectorAll('[data-rs]').forEach(b => { b.disabled = !rsSel; });
+      rsPanel.querySelectorAll('[data-rs], [data-st]').forEach(b => { b.disabled = !rsSel; });
+      stShow();
     };
-    const rsSelect = el => { if (rsSel) rsSel.classList.remove('ef-sel'); rsSel = el; if (rsSel) rsSel.classList.add('ef-sel'); rsShow(); };
+    const rsSelect = el => { if (rsSel) { rsSel.classList.remove('ef-sel'); if (!rsSel.className) rsSel.removeAttribute('class'); } rsSel = el; if (rsSel) rsSel.classList.add('ef-sel'); rsShow(); };
     const setResize = on => {
       resizing = on;
       rsToggle.setAttribute('aria-pressed', String(on));
@@ -2234,7 +2246,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       liveEls.forEach(el => { if (on) el.removeAttribute('contenteditable'); else if (editing) el.contentEditable = 'true'; });
       quotes.querySelectorAll('.quote').forEach(q => editQuote(q, editing && !on));
       if (!on) rsSelect(null); else rsShow();
-      say(on ? 'Resize is on. Tap a box, heading or text, then use the buttons. Tap Resize again to go back to editing words.' : '');
+      say(on ? 'Resize & style is on. Tap a box, heading or text, then use the buttons. Tap Resize & style again to go back to editing words.' : '');
     };
     rsToggle.addEventListener('click', () => setResize(!resizing));
     document.addEventListener('ef-mode', e => { if (!e.detail && resizing) setResize(false); });
@@ -2265,11 +2277,105 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
         if (up && liveRoot.contains(up)) rsSelect(up); else say('There is no bigger box around this item.');
         return;
       } else if (what === 'reset') {
-        ['zoom', 'width', 'max-width', 'min-height', 'flex'].forEach(prop => el.style.removeProperty(prop));
+        ['zoom', 'width', 'max-width', 'min-height', 'flex', 'font-family', 'font-weight', 'font-style', 'text-decoration', 'color', 'background-color'].forEach(prop => el.style.removeProperty(prop));
+        loadFonts();
         if (!el.getAttribute('style')) el.removeAttribute('style');
       }
       rsShow();
     });
+
+    // ---------- Style: font, bold / italic / underline, text colour and background for the selected item; fonts for the whole site ----------
+    const FONTS = [
+      ['', 'Site default'],
+      ['Arial, Helvetica, sans-serif', 'Arial'],
+      ['"Arial Narrow", "Archivo Narrow", Arial, sans-serif', 'Arial Narrow'],
+      ['Georgia, "Times New Roman", serif', 'Georgia'],
+      ['"Times New Roman", Times, serif', 'Times New Roman'],
+      ['Verdana, Geneva, sans-serif', 'Verdana'],
+      ['"Trebuchet MS", Arial, sans-serif', 'Trebuchet MS'],
+      ['"Courier New", Courier, monospace', 'Courier New'],
+      ['Poppins, Arial, sans-serif', 'Poppins', 'Poppins:wght@400;700'],
+      ['Montserrat, Arial, sans-serif', 'Montserrat', 'Montserrat:wght@400;700'],
+      ['Roboto, Arial, sans-serif', 'Roboto', 'Roboto:wght@400;700'],
+      ['Lato, Arial, sans-serif', 'Lato', 'Lato:wght@400;700'],
+      ['"Open Sans", Arial, sans-serif', 'Open Sans', 'Open+Sans:wght@400;700'],
+      ['"Playfair Display", Georgia, serif', 'Playfair Display', 'Playfair+Display:wght@400;700'],
+      ['Merriweather, Georgia, serif', 'Merriweather', 'Merriweather:wght@400;700'],
+    ];
+    const firstFam = v => (v || '').split(',')[0].replace(/["']/g, '').trim().toLowerCase();
+    const fontValue = css => (FONTS.find(f => f[0] && firstFam(f[0]) === firstFam(css)) || FONTS[0])[0];
+    [$('ef-st-font'), $('ef-gf-display'), $('ef-gf-body')].forEach(sel => FONTS.forEach(([v, label]) => sel.add(new Option(label, v))));
+    // Google fonts load only when the page uses them: one stylesheet link, kept in step with the fonts chosen.
+    const fontsTag = $('ef-fonts');
+    const savedFonts = fontsTag ? fontsTag.textContent : '';
+    let fontsCss = savedFonts;
+    const usedText = root => fontsCss + ' ' + (root ? [...root.querySelectorAll('[style*="font-family"]')].map(n => n.getAttribute('style')).join(' ') : '');
+    const gfHref = text => { const used = FONTS.filter(f => f[2] && text.includes(f[1])); return used.length ? 'https://fonts.googleapis.com/css2?' + used.map(f => 'family=' + f[2]).join('&') + '&display=swap' : ''; };
+    const setFontLink = (root, href) => {
+      let link = root.querySelector('#ef-gfonts');
+      if (!href) { if (link) link.remove(); return; }
+      if (!link) {
+        link = document.createElement('link'); link.id = 'ef-gfonts'; link.rel = 'stylesheet';
+        const anchor = root.querySelector('link[href*="fonts.googleapis.com/css2"]');
+        if (anchor) anchor.after(link); else root.prepend(link);
+      }
+      link.href = href;
+    };
+    const loadFonts = () => setFontLink(document, gfHref(usedText(liveRoot)));
+    const gfD = $('ef-gf-display'), gfB = $('ef-gf-body');
+    const initFonts = () => {
+      gfD.value = fontValue((fontsCss.match(/--font-display:\s*([^;]+)/) || [])[1]);
+      gfB.value = fontValue((fontsCss.match(/--font-body:\s*([^;]+)/) || [])[1]);
+    };
+    initFonts();
+    const applyFonts = () => {
+      const parts = [gfD.value && '--font-display: ' + gfD.value, gfB.value && '--font-body: ' + gfB.value].filter(Boolean);
+      fontsCss = parts.length ? ':root:root:root { ' + parts.join('; ') + '; }' : '';
+      if (fontsTag) fontsTag.textContent = fontsCss;
+      loadFonts();
+      say('Whole-site fonts updated. Save changes to keep them.');
+    };
+    gfD.addEventListener('change', applyFonts);
+    gfB.addEventListener('change', applyFonts);
+    const toHex = c => {
+      const m = (c || '').match(/rgba?\(([\d.]+)[, ]+([\d.]+)[, ]+([\d.]+)(?:[, /]+([\d.]+))?/);
+      if (!m || (m[4] !== undefined && +m[4] === 0)) return null;
+      return '#' + [m[1], m[2], m[3]].map(v => Math.round(+v).toString(16).padStart(2, '0')).join('');
+    };
+    function stShow() {
+      const el = rsSel, cs = el ? getComputedStyle(el) : null;
+      $('ef-st-font').value = el ? fontValue(el.style.fontFamily) : '';
+      rsPanel.querySelector('[data-st="bold"]').setAttribute('aria-pressed', String(!!cs && (parseInt(cs.fontWeight, 10) || 400) >= 600));
+      rsPanel.querySelector('[data-st="italic"]').setAttribute('aria-pressed', String(!!cs && cs.fontStyle === 'italic'));
+      rsPanel.querySelector('[data-st="underline"]').setAttribute('aria-pressed', String(!!cs && (cs.textDecorationLine || cs.textDecoration || '').includes('underline')));
+      $('ef-st-color').value = (cs && toHex(cs.color)) || '#0b1e5b';
+      $('ef-st-bg').value = (cs && toHex(cs.backgroundColor)) || '#ffffff';
+    }
+    $('ef-st-font').addEventListener('change', e => {
+      if (!rsSel) return;
+      if (e.target.value) rsSel.style.fontFamily = e.target.value; else rsSel.style.removeProperty('font-family');
+      loadFonts();
+    });
+    $('ef-st-color').addEventListener('input', e => { if (rsSel) rsSel.style.color = e.target.value; });
+    $('ef-st-bg').addEventListener('input', e => { if (rsSel) rsSel.style.backgroundColor = e.target.value; });
+    rsPanel.addEventListener('click', e => {
+      const b = e.target.closest('button[data-st]');
+      if (!b || !rsSel) return;
+      const el = rsSel, cs = getComputedStyle(el), what = b.dataset.st;
+      if (what === 'bold') el.style.fontWeight = (parseInt(cs.fontWeight, 10) || 400) >= 600 ? '400' : '700';
+      else if (what === 'italic') el.style.fontStyle = cs.fontStyle === 'italic' ? 'normal' : 'italic';
+      else if (what === 'underline') el.style.textDecoration = (cs.textDecorationLine || cs.textDecoration || '').includes('underline') ? 'none' : 'underline';
+      else if (what === 'color-reset') el.style.removeProperty('color');
+      else if (what === 'bg-reset') el.style.removeProperty('background-color');
+      if (!el.getAttribute('style')) el.removeAttribute('style');
+      stShow();
+    });
+    // Discard puts sizes, styles and fonts back as they were saved.
+    const rsRevert = () => {
+      const liveRs = rsItems(liveRoot), tplRs = rsItems(tpl.content.getElementById('ef-root'));
+      if (liveRs.length === tplRs.length) liveRs.forEach((el, i) => { const st = tplRs[i].getAttribute('style'); if (st) el.setAttribute('style', st); else el.removeAttribute('style'); });
+      fontsCss = savedFonts; if (fontsTag) fontsTag.textContent = savedFonts; initFonts(); loadFonts();
+    };
 
     save.addEventListener('click', async () => {
       const bad = Object.keys(LINKS).find(id => { const v = $(id).value.trim(); return v && (id === 'ef-l-leademail' ? !isEmail(v) : !/^https:\/\//i.test(v)); });
@@ -2290,7 +2396,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
         say('A testimonial still has sample text. Replace the words and client name, and fill in or delete the program and designation, then save.');
         return;
       }
-      document.querySelectorAll('.ef-sel').forEach(n => n.classList.remove('ef-sel'));
+      document.querySelectorAll('.ef-sel').forEach(n => { n.classList.remove('ef-sel'); if (!n.className) n.removeAttribute('class'); });
       liveEls.forEach((el, i) => { tplEls[i].innerHTML = el.innerHTML; });
       // Sizes set with Resize: copy each item's style attribute to the same item in the saved page.
       const liveRs = rsItems(liveRoot), tplRs = rsItems(tpl.content.getElementById('ef-root'));
@@ -2299,6 +2405,9 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       const mDateTpl = tpl.content.getElementById('m-date'), mWhenTpl = tpl.content.getElementById('m-when');
       if (mDateTpl) { mDateTpl.removeAttribute('min'); mDateTpl.removeAttribute('max'); }
       if (mWhenTpl) mWhenTpl.textContent = '';
+      const fontsTpl = tpl.content.getElementById('ef-fonts');
+      if (fontsTpl) fontsTpl.textContent = fontsCss;
+      setFontLink(tpl.content, gfHref(usedText(tpl.content.getElementById('ef-root'))));
       const savedQuotes = quotes.cloneNode(true);
       savedQuotes.querySelectorAll('.ef-only').forEach(n => n.remove());
       savedQuotes.querySelectorAll('[contenteditable]').forEach(n => n.removeAttribute('contenteditable'));
