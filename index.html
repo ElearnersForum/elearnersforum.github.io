@@ -135,6 +135,10 @@ header.site {
 .nav-links a:hover { color: var(--night-ink); background: rgba(96, 165, 250, 0.12); }
 .nav-links .btn { margin-left: 8px; padding: 9px 16px; font-size: 15px; color: var(--accent-ink); }
 .nav-links .btn:hover { background: var(--accent-hover); }
+.nav-links .btn.nav-meet { background: transparent; border: 1.5px solid rgba(147, 197, 253, 0.6); color: var(--night-ink); }
+.nav-links .btn.nav-meet:hover { background: rgba(96, 165, 250, 0.18); }
+.nav-links a { white-space: nowrap; }
+@media (min-width: 961px) and (max-width: 1180px) { .nav-links a { padding: 8px 8px; font-size: 14.5px; } .nav-links .btn { margin-left: 4px; padding: 8px 12px; font-size: 14px; } }
 body[data-page="home"] .nav-links a[href="#home"],
 body[data-page="programs"] .nav-links a[href="#programs"],
 body[data-page="about"] .nav-links a[href="#about"],
@@ -529,6 +533,9 @@ form.enquiry legend { grid-column: 1 / -1; font-family: var(--font-display); fon
 .note-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .btn-wa { background: #0b7a4b; color: #ffffff; }
 .btn-wa:hover { background: #096640; }
+.wa-float { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 40; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28); }
+@media (max-width: 600px) { .wa-float span { display: none; } .wa-float { padding: 14px; } }
+body.ef-editing .wa-float { display: none; }
 .trusted { padding-block: 36px; background: var(--surface); border-bottom: 1px solid var(--line); }
 .trusted .wrap { display: grid; gap: 16px; }
 .trusted-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
@@ -631,6 +638,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       <a href="#about">About Us</a>
       <a href="#testimonials">Testimonials</a>
       <a href="#careers">Careers</a>
+      <a class="btn btn-ghost nav-meet" href="#meet">Meet us online</a>
       <a class="btn btn-primary" href="#contact">Contact Us</a>
     </nav>
   </div>
@@ -1432,6 +1440,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     </nav>
   </div>
 </footer>
+<a class="btn btn-wa wa-float" href="https://wa.me/919886311588" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><span>Chat with us</span></a>
 </div>
 
 <div class="ef-bar" id="ef-bar" hidden="">
@@ -1557,6 +1566,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     if (wa) { wa.hidden = !n; if (n) wa.href = whatsapp(); }
   };
   syncContactLinks();
+  // The floating chat button uses the same WhatsApp number as the Contact page.
+  document.querySelectorAll('.wa-float').forEach(a => { const n = waNumber(); a.hidden = !n; if (n) a.href = whatsapp(); });
   const applyConfig = cfg => {
     document.querySelectorAll('[data-link]').forEach(a => {
       const key = a.dataset.link;
