@@ -533,9 +533,10 @@ form.enquiry legend { grid-column: 1 / -1; font-family: var(--font-display); fon
 .note-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .btn-wa { background: #0b7a4b; color: #ffffff; }
 .btn-wa:hover { background: #096640; }
-.wa-float { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 40; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28); }
-@media (max-width: 600px) { .wa-float span { display: none; } .wa-float { padding: 14px; } }
-body.ef-editing .wa-float { display: none; }
+.mail-float { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 40; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28); display: inline-flex; align-items: center; gap: 8px; }
+.mail-float::before { content: ""; width: 20px; height: 20px; flex: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='3'/%3E%3Cpath d='M4 7l8 6 8-6'/%3E%3C/svg%3E") center / contain no-repeat; }
+@media (max-width: 600px) { .mail-float span { display: none; } .mail-float { padding: 14px; } }
+body.ef-editing .mail-float { display: none; }
 .trusted { padding-block: 36px; background: var(--surface); border-bottom: 1px solid var(--line); }
 .trusted .wrap { display: grid; gap: 16px; }
 .trusted-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
@@ -1440,7 +1441,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     </nav>
   </div>
 </footer>
-<a class="btn btn-wa wa-float" href="https://wa.me/919886311588" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><span>Chat with us</span></a>
+<a class="btn btn-primary mail-float" href="mailto:elearnersforum@gmail.com" aria-label="Email us"><span>Email us</span></a>
 </div>
 
 <div class="ef-bar" id="ef-bar" hidden="">
@@ -1566,8 +1567,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     if (wa) { wa.hidden = !n; if (n) wa.href = whatsapp(); }
   };
   syncContactLinks();
-  // The floating chat button uses the same WhatsApp number as the Contact page.
-  document.querySelectorAll('.wa-float').forEach(a => { const n = waNumber(); a.hidden = !n; if (n) a.href = whatsapp(); });
+  // The floating Email us button writes to the same inbox as the enquiry form.
+  document.querySelectorAll('.mail-float').forEach(a => { a.href = mailto('Enquiry from the ElearnersForum website'); appLink(a); });
   const applyConfig = cfg => {
     document.querySelectorAll('[data-link]').forEach(a => {
       const key = a.dataset.link;
