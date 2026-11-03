@@ -1217,7 +1217,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
             <div class="field"><label for="t-name">Full name <span class="req">*</span></label><input id="t-name" name="name" autocomplete="name" required=""></div>
             <div class="field"><label for="t-email">Email <span class="req">*</span></label><input id="t-email" name="email" type="email" autocomplete="email" required=""></div>
             <div class="field"><label for="t-phone">Mobile / WhatsApp number <span class="req">*</span></label><input id="t-phone" name="phone" type="tel" autocomplete="tel" required=""></div>
-            <div class="field"><label for="t-city">City <span class="req">*</span></label><input id="t-city" name="city" autocomplete="address-level2" placeholder="For example: Pune" required=""></div>
+            <div class="field"><label for="t-city">City <span class="req">*</span></label><input id="t-city" name="city" autocomplete="address-level2" required=""></div>
             <div class="field full"><span class="q" id="q-t-areas">Which areas do you train in? <span class="req">*</span></span>
               <div class="area-groups" role="group" aria-labelledby="q-t-areas">
                 <div class="chip-group"><span class="sub">People development</span>
@@ -1250,8 +1250,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
               <select id="t-years" name="training_years" required=""><option value="">Choose one</option><option>Under 2</option><option>2–5</option><option>6–10</option><option>More than 10</option></select></div>
             <div class="field"><label for="t-mode">How would you like to work with us?</label>
               <select id="t-mode" name="work_mode"><option value="">Choose one</option><option>Full-time associate</option><option>Freelance, weekdays</option><option>Freelance, weekends</option><option>Project by project</option></select></div>
-            <div class="field full"><label for="t-link">LinkedIn profile or CV link</label><input id="t-link" name="profile_link" type="url" placeholder="https://www.linkedin.com/in/… or a Google Drive link to your CV"></div>
-            <div class="field full"><label for="t-note">Certifications and strongest topics</label><textarea id="t-note" name="notes" placeholder="For example: ICF ACC, MBTI, ISO 9001 Lead Auditor. Top topics: feedback conversations, root cause analysis"></textarea></div>
+            <div class="field full"><label for="t-link">LinkedIn profile or CV link</label><input id="t-link" name="profile_link" type="url"></div>
+            <div class="field full"><label for="t-note">Certifications and strongest topics</label><textarea id="t-note" name="notes"></textarea></div>
           </fieldset>
           <label class="consent"><input type="checkbox" id="t-consent" required="">I agree that ElearnersForum may store my details and contact me about trainer opportunities.</label>
           <div><button class="btn btn-primary" type="submit">Send application</button></div>
@@ -1399,7 +1399,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
               <select id="f-format" name="format"><option value="">Choose one</option><option>On-site at our office</option><option>Offsite venue</option><option>Live virtual</option><option>Blended</option><option>Not sure</option></select></div>
             <div class="field"><label for="f-level">Participant level</label>
               <select id="f-level" name="level"><option value="">Choose one</option><option>New hires</option><option>Executives</option><option>Team leads and first-time managers</option><option>Middle managers</option><option>Senior leaders / CXOs</option><option>Mixed levels</option></select></div>
-            <div class="field full"><label for="f-msg" id="f-msg-label">What business challenge should this training solve? <span class="req">*</span></label><textarea id="f-msg" name="challenge" placeholder="For example: new managers struggle to give feedback, or customer complaints are rising" required=""></textarea></div>
+            <div class="field full"><label for="f-msg" id="f-msg-label">What business challenge should this training solve? <span class="req">*</span></label><textarea id="f-msg" name="challenge" required=""></textarea></div>
           </fieldset>
           <fieldset id="fs-ielts" hidden="">
             <legend>IELTS details</legend>
@@ -1440,7 +1440,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
             <div class="field"><label for="m-email">Email ID <span class="req">*</span></label><input id="m-email" name="m_email" type="email" autocomplete="email" required=""></div>
             <div class="field"><label for="m-phone">Mobile number <span class="req">*</span></label><input id="m-phone" name="m_phone" type="tel" autocomplete="tel" required=""></div>
             <div class="field"><label for="m-company">Company <span class="opt">(optional)</span></label><input id="m-company" name="m_company" autocomplete="organization"></div>
-            <div class="field full"><label for="m-msg">What would you like to discuss? <span class="opt">(optional)</span></label><textarea id="m-msg" name="m_msg" placeholder="For example: I want to become a successful leader"></textarea></div>
+            <div class="field full"><label for="m-msg">What would you like to discuss? <span class="opt">(optional)</span></label><textarea id="m-msg" name="m_msg"></textarea></div>
           </fieldset>
           <label class="consent"><input type="checkbox" id="m-consent" required="">I agree that ElearnersForum may contact me to arrange this meeting. Read our <a href="#privacy">privacy notice</a>.</label>
           <div><button class="btn btn-primary" type="submit">Request a meeting</button><p class="form-hint">Your request comes straight to our team by email, and you get a confirmation with the time you chose.</p></div>
@@ -1750,7 +1750,6 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     document.getElementById('fs-ielts').hidden = !document.getElementById('f-area-ielts').checked;
     document.getElementById('f-msg-label').firstChild.textContent = self ? 'What would you like to achieve? ' : 'What business challenge should this training solve? ';
     form.querySelector('label[for="f-email"]').firstChild.textContent = self ? 'Email ID ' : 'Work email ';
-    document.getElementById('f-msg').placeholder = self ? 'For example: I want to become a successful leader' : 'For example: new managers struggle to give feedback, or customer complaints are rising';
   };
   // For each ticked area, a "which program?" dropdown listing that area's modules from the Programs page,
   // so it always matches the Programs page (including any edits made there in Customise).
