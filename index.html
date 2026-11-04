@@ -1251,7 +1251,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
             <div class="field"><label for="t-mode">How would you like to work with us?</label>
               <select id="t-mode" name="work_mode"><option value="">Choose one</option><option>Full-time associate</option><option>Freelance, weekdays</option><option>Freelance, weekends</option><option>Project by project</option></select></div>
             <div class="field full"><label for="t-link">LinkedIn profile link</label><input id="t-link" name="profile_link" type="url"></div>
-            <div class="field full"><label for="t-cvfile">Upload your CV (PDF, up to 5 MB)</label><input id="t-cvfile" name="attachment" type="file" accept="application/pdf,.pdf"></div>
+            <div class="field full"><label for="t-cvfile">Upload your CV (PDF, up to 9 MB)</label><input id="t-cvfile" name="attachment" type="file" accept="application/pdf,.pdf"></div>
             <div class="field full"><label for="t-note">Certifications and strongest topics</label><textarea id="t-note" name="notes"></textarea></div>
           </fieldset>
           <label class="consent"><input type="checkbox" id="t-consent" required="">I agree that ElearnersForum may store my details and contact me about trainer opportunities.</label>
@@ -2036,7 +2036,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     if (!validate(tForm, tNote, ['t-name', 't-email', 't-phone', 't-city', 't-years'], T_GROUPS)) return;
     const cvInput = document.getElementById('t-cvfile'), cv = cvInput && cvInput.files && cvInput.files[0];
     if (cv && !(/\.pdf$/i.test(cv.name) || cv.type === 'application/pdf')) { cvInput.setAttribute('aria-invalid', 'true'); showNote(tNote, 'Please upload your CV as a PDF file.', true); return; }
-    if (cv && cv.size > 5 * 1024 * 1024) { cvInput.setAttribute('aria-invalid', 'true'); showNote(tNote, 'Your CV is larger than 5 MB. Please upload a smaller PDF.', true); return; }
+    if (cv && cv.size > 9 * 1024 * 1024) { cvInput.setAttribute('aria-invalid', 'true'); showNote(tNote, 'Your CV is larger than 9 MB. Please upload a smaller PDF.', true); return; }
     (cv ? (f, b, o) => sendWithFile(f, b, o, cvInput) : sendLead)(tForm, tNote, {
       subject: 'Trainer application - ' + document.getElementById('t-name').value.trim(),
       title: 'New trainer application (ElearnersForum website)',
