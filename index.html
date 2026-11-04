@@ -547,6 +547,13 @@ form.enquiry legend { grid-column: 1 / -1; font-family: var(--font-display); fon
 .note-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .btn-wa { background: #0b7a4b; color: #ffffff; }
 .btn-wa:hover { background: #096640; }
+.booking-card { padding: 0; overflow: hidden; }
+.booking-card > p { padding: 24px; }
+.booking-card iframe { display: block; width: 100%; height: 720px; border: 0; background: #ffffff; }
+@media (max-width: 760px) { .booking-card iframe { height: 1000px; } }
+.meet-alt { margin-top: 18px; }
+.meet-alt > summary { cursor: pointer; font-weight: 700; color: var(--accent); padding: 10px 0; }
+.meet-alt[open] > summary { margin-bottom: 12px; }
 .mail-float { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 40; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28); display: inline-flex; align-items: center; gap: 8px; }
 .mail-float::before { content: ""; width: 20px; height: 20px; flex: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='3'/%3E%3Cpath d='M4 7l8 6 8-6'/%3E%3C/svg%3E") center / contain no-repeat; }
 @media (max-width: 600px) { .mail-float span { display: none; } .mail-float { padding: 14px; } }
@@ -1425,8 +1432,13 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
         <p class="label">Meet us</p>
         <h2>Meet us online</h2>
         <ul class="points"><li>A video call with our team to understand your training needs, for your organisation or for yourself</li></ul>
+        <div class="btn-row" style="margin-top:8px"><a class="btn btn-primary" href="https://calendar.app.google/bkNv2P5whejcVDeJ6" target="_blank" rel="noopener">Book a time</a></div>
       </div>
       <div>
+        <div class="card booking-card" id="booking-embed" data-src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ26-niNJliTvY4djIAhylM4-kZYQ2nwyhu3icCZg0RpriG0C70X82SIkuyFBgW7Z9rKL5bGhP76?gv=true">
+          <p>Choose a time on our booking page: <a href="https://calendar.app.google/bkNv2P5whejcVDeJ6" target="_blank" rel="noopener">open the calendar</a>.</p>
+        </div>
+        <details class="meet-alt"><summary>Can't find a time that suits you? Send us a request</summary>
         <form class="card enquiry" id="meet-form" novalidate="">
           <div class="form-note" id="meet-note" role="status" tabindex="-1" hidden=""></div>
           <fieldset>
@@ -1446,6 +1458,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
           <label class="consent"><input type="checkbox" id="m-consent" required="">I agree that ElearnersForum may contact me to arrange this meeting. Read our <a href="#privacy">privacy notice</a>.</label>
           <div><button class="btn btn-primary" type="submit">Request a meeting</button><p class="form-hint">Your request comes straight to our team by email, and you get a confirmation with the time you chose.</p></div>
         </form>
+        </details>
       </div>
     </div>
   </section>
@@ -1895,6 +1908,15 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       confirm: 'Thank you for your training enquiry with ElearnersForum. We have received your details and will reply within 1 working day to book a discovery call.',
     });
   });
+
+  // ---------- Meet us online: the Google Calendar booking page, shown inside the page on the live website ----------
+  // (Inside Claude, other sites can't be shown in a frame, so the "open the calendar" link is used there.)
+  const bookingBox = document.getElementById('booking-embed');
+  if (bookingBox && bookingBox.dataset.src && !inClaude) {
+    const bookingFrame = document.createElement('iframe');
+    bookingFrame.src = bookingBox.dataset.src; bookingFrame.title = 'Book a time with ElearnersForum'; bookingFrame.loading = 'lazy';
+    bookingBox.textContent = ''; bookingBox.appendChild(bookingFrame);
+  }
 
   // ---------- Meet us: request a virtual meeting, at least 24 hours ahead ----------
   // Times are offered in India time (IST, UTC+5:30), Monday to Saturday, in 30-minute steps from 9:30 am to 6:00 pm.
