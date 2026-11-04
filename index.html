@@ -1681,39 +1681,75 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     }
   };
   applyConfig(CONFIG);
-  // Home picture: the four labels slowly orbit the book on an ellipse (not for visitors who prefer less motion).
-  // The motion lives in a style sheet in the page head, so nothing about it is saved into the page; it pauses while you edit in Customise.
+  // Home picture: the four labels ride along the outer ring line around the book and slowly go round it.
+  // Visitors who prefer less motion see them still, on the same line. Positions live in a style sheet in the page head,
+  // so nothing about them is saved into the page; the labels hold still while you edit in Customise.
   (() => {
     const art = document.querySelector('.hero-art');
-    if (!art || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!art) return;
     const chips = [...art.querySelectorAll('.float-chip')];
     if (!chips.length) return;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const sheet = document.createElement('style');
     sheet.id = 'orbit-style';
     document.head.appendChild(sheet);
-    const PERIOD = 40000, t0 = performance.now();
-    let visible = true, editing = false, running = false;
-    const loop = now => {
-      if (!visible || editing) { running = false; sheet.textContent = ''; return; }
+    const PERIOD = 40000, TURN = 2 * Math.PI, START = { c1: 225, c2: 315, c3: 135, c4: 45 };
+    let phase = 0, last = 0, visible = true, editing = false, running = false, geo = null;
+    const classOf = c => [...c.classList].find(n => /^c\d+$/.test(n));
+    // Size of the ring: as big as fits without the labels running into the text beside the picture or off the screen.
+    const measure = () => {
       const W = art.clientWidth, H = art.clientHeight;
-      let css = ':root .hero-art .float-chip { top: 0; left: 0; right: auto; bottom: auto; animation: none; will-change: transform, opacity; }\n';
+      const sizes = chips.map(c => [c.offsetWidth, c.offsetHeight]);
+      const shown = sizes.filter(s => s[0]);
+      if (!W || !H || !shown.length) return null;
+      const halfW = Math.max(...shown.map(s => s[0])) / 2, halfH = Math.max(...shown.map(s => s[1])) / 2;
+      const a = art.getBoundingClientRect(), grid = (art.parentElement || art).getBoundingClientRect();
+      const page = (art.closest('section') || document.body).getBoundingClientRect();
+      let left = a.left - page.left, right = page.right - a.right, up = a.top - grid.top, down = grid.bottom - a.bottom;
+      const prev = art.previousElementSibling, p = prev && prev.getBoundingClientRect();
+      if (p && p.width) {
+        if (p.right <= a.left + 1) left = Math.min(left, a.left - p.right);
+        else if (p.bottom <= a.top + 1) up = a.top - p.bottom;
+      }
+      const side = Math.max(0, Math.min(left, right) - 10);
+      const k = Math.min(1, Math.max(0.85, (W / 2 + side - 0.38 * W) / halfW)); // labels shrink a little when room is tight
+      const rx = Math.max(40, Math.min(W * 0.54, W / 2 + side - halfW * k));
+      const ry = Math.max(30, Math.min(rx * 0.85, H / 2 + Math.max(0, Math.min(up, down) - 6) - halfH * k));
+      return { W, H, rx, ry, k, sizes };
+    };
+    const render = () => {
+      if (!geo) { sheet.textContent = ''; return; }
+      const { W, H, rx, ry, k, sizes } = geo, f = n => n.toFixed(1);
+      const ring = s => f(H / 2 - ry * s - 0.75) + 'px ' + f(W / 2 - rx * s - 0.75) + 'px';
+      // when the ring has to be small, the book shrinks with it so it still sits inside the ring
+      let css = ':root .hero-art::before { inset: ' + ring(1) + '; }\n:root .hero-art::after { inset: ' + ring(0.76) + '; }\n' +
+        ':root .hero-art img { max-width: ' + f(rx * 2.4) + 'px; }\n' +
+        ':root .hero-art .float-chip { top: 0; left: 0; right: auto; bottom: auto; animation: none; will-change: transform, opacity; }\n';
       chips.forEach((c, i) => {
-        const w = c.offsetWidth, h = c.offsetHeight;
-        if (!w) return;
-        const a = (now - t0) / PERIOD * 2 * Math.PI + i * Math.PI / 2;
-        const rx = Math.max(0, W / 2 - w / 2 - 6), ry = Math.max(0, (H / 2 - h / 2 - 6) * 0.8);
-        const x = W / 2 + rx * Math.cos(a) - w / 2, y = H / 2 + ry * Math.sin(a) - h / 2;
-        const depth = (Math.sin(a) + 1) / 2; // 0 at the back of the orbit, 1 at the front
-        const cls = [...c.classList].find(k => /^c\d+$/.test(k));
-        if (!cls) return;
-        css += ':root .hero-art .float-chip.' + cls + ' { transform: translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px) scale(' + (0.88 + 0.12 * depth).toFixed(3) + '); opacity: ' + (0.72 + 0.28 * depth).toFixed(2) + '; z-index: ' + (depth > 0.5 ? 2 : 1) + '; }\n';
+        const cls = classOf(c), [w, h] = sizes[i];
+        if (!cls || !w) return;
+        const t = (cls in START ? START[cls] : i * 90) * Math.PI / 180 + phase;
+        const x = W / 2 + rx * Math.cos(t) - w / 2, y = H / 2 + ry * Math.sin(t) - h / 2;
+        const depth = (Math.sin(t) + 1) / 2; // 0 at the back of the ring, 1 at the front
+        css += ':root .hero-art .float-chip.' + cls + ' { transform: translate(' + f(x) + 'px, ' + f(y) + 'px) scale(' + (k * (0.88 + 0.12 * depth)).toFixed(3) + '); opacity: ' + (0.72 + 0.28 * depth).toFixed(2) + '; z-index: ' + (depth > 0.5 ? 2 : 1) + '; }\n';
       });
       sheet.textContent = css;
+    };
+    const refresh = () => { geo = measure(); render(); };
+    const loop = now => {
+      if (!visible || editing || still) { running = false; return; }
+      if (last) phase = (phase + (now - last) / PERIOD * TURN) % TURN;
+      last = now;
+      render();
       requestAnimationFrame(loop);
     };
-    const kick = () => { if (!running && visible && !editing) { running = true; requestAnimationFrame(loop); } };
+    const kick = () => { if (!running && visible && !editing && !still) { running = true; last = 0; requestAnimationFrame(loop); } };
+    refresh();
+    addEventListener('resize', refresh);
+    if ('ResizeObserver' in window) { const ro = new ResizeObserver(refresh); ro.observe(art); chips.forEach(c => ro.observe(c)); }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
     if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es.some(e => e.isIntersecting); kick(); }).observe(art);
-    document.addEventListener('ef-mode', e => { editing = !!e.detail; if (editing) sheet.textContent = ''; else kick(); });
+    document.addEventListener('ef-mode', e => { editing = !!e.detail; if (editing) refresh(); else kick(); });
     kick();
   })();
   // Home page numbers count up when they come into view (live website only, and not for visitors who prefer less motion).
