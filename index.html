@@ -1202,7 +1202,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       <div class="section-head" style="margin-bottom:0">
         <p class="label">Apply</p>
         <h2>Join our trainer panel</h2>
-        <ul class="points"><li>Takes about 2 minutes</li><li>Share your LinkedIn or CV link; we'll ask for more if there's a fit</li><li>We reply within 10 working days</li></ul>
+        <ul class="points"><li>Takes about 2 minutes</li><li>Share your LinkedIn profile and upload your CV; we'll ask for more if there's a fit</li><li>We reply within 10 working days</li></ul>
       </div>
       <div>
         <div class="card linked-form" id="trainer-linked" hidden="">
@@ -1251,7 +1251,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
             <div class="field"><label for="t-mode">How would you like to work with us?</label>
               <select id="t-mode" name="work_mode"><option value="">Choose one</option><option>Full-time associate</option><option>Freelance, weekdays</option><option>Freelance, weekends</option><option>Project by project</option></select></div>
             <div class="field full"><label for="t-link">LinkedIn profile link</label><input id="t-link" name="profile_link" type="url"></div>
-            <div class="field full"><label for="t-cv">CV (PDF) on Google Drive</label><input id="t-cv" name="cv_link" type="url"><span class="form-hint" style="margin-top:2px">Upload your CV to Google Drive, set sharing to “Anyone with the link”, then paste the link here.</span></div>
+            <div class="field full"><label for="t-cvfile">Upload your CV (PDF, up to 5 MB)</label><input id="t-cvfile" name="attachment" type="file" accept="application/pdf,.pdf"></div>
             <div class="field full"><label for="t-note">Certifications and strongest topics</label><textarea id="t-note" name="notes"></textarea></div>
           </fieldset>
           <label class="consent"><input type="checkbox" id="t-consent" required="">I agree that ElearnersForum may store my details and contact me about trainer opportunities.</label>
@@ -1796,7 +1796,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
   const answers = (f, groups) => {
     const out = [], done = new Set();
     for (const el of f.elements) {
-      if (!el.name || done.has(el.name) || el.closest('[hidden]')) continue;
+      if (!el.name || done.has(el.name) || el.closest('[hidden]') || el.type === 'file') continue;
       let value;
       if (el.type === 'radio' || el.type === 'checkbox') {
         done.add(el.name);
@@ -1990,10 +1990,54 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
   tForm.addEventListener('change', e => {
     if (e.target.name === 't_areas') tForm.querySelectorAll('.chips[aria-invalid]').forEach(c => c.removeAttribute('aria-invalid'));
   });
+  // ---------- Trainer CVs: send the application with the PDF attached ----------
+  // A file can't travel in the usual email request, so the answers and the PDF are posted the classic way into a hidden frame;
+  // FormSubmit then emails them to our inbox with the CV attached.
+  const sendWithFile = (f, box, { subject, title, pairs, replyTo, name, thanks, confirm }, fileInput) => {
+    if (inClaude) { showNote(box, 'CV upload works on the live website, elearnersforum.github.io. Here inside Claude, remove the file to test the form.', true); return; }
+    const phone = (document.querySelector('[data-kind="phone"]')?.textContent || '').trim();
+    const confirmation = 'Dear ' + name + ',\n\n' + confirm + '\n\nHere is a copy of what you sent us:\n' +
+      pairs.map(([k, v]) => '• ' + k + ': ' + v).join('\n') + '\n• CV: ' + fileInput.files[0].name +
+      '\n\nIf anything needs changing, write to ' + leadEmail() + (waNumber() && phone ? ' or WhatsApp us on ' + phone : '') + '.\n\nTeam ElearnersForum';
+    const frameName = 'ef-upload-frame';
+    let frame = document.querySelector('iframe[name="' + frameName + '"]');
+    if (!frame) { frame = document.createElement('iframe'); frame.name = frameName; frame.title = 'CV upload'; frame.hidden = true; document.body.appendChild(frame); }
+    const post = document.createElement('form');
+    post.method = 'POST'; post.enctype = 'multipart/form-data'; post.action = 'https://formsubmit.co/' + leadEmail(); post.target = frameName; post.hidden = true;
+    const add = (k, v) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = v; post.appendChild(i); };
+    add('_subject', subject); add('_template', 'table'); add('_captcha', 'false'); add('_autoresponse', confirmation); add('email', replyTo);
+    pairs.filter(([, v]) => v !== replyTo).forEach(([k, v]) => add(k, v));
+    // Move the visitor's own file box into the post (it keeps the chosen PDF), and put it back afterwards.
+    const holder = fileInput.parentNode, after = fileInput.nextSibling;
+    post.appendChild(fileInput);
+    document.body.appendChild(post);
+    const submit = f.querySelector('button[type="submit"]');
+    submit.disabled = true;
+    showNote(box, 'Sending your application and CV…', false);
+    let done = false;
+    const finish = ok => {
+      if (done) return;
+      done = true;
+      holder.insertBefore(fileInput, after); post.remove(); submit.disabled = false;
+      showNote(box, '', false);
+      const msg = document.createElement('p');
+      msg.textContent = ok ? thanks + ' Your CV was attached.' : 'Your application is taking longer than usual to send. If you don\'t hear from us within 10 working days, email your CV to ' + leadEmail() + '.';
+      box.append(msg);
+    };
+    frame.onload = () => {
+      try { if (frame.contentWindow.location.href === 'about:blank') return; } catch (err) { /* the FormSubmit page has loaded */ }
+      finish(true);
+    };
+    setTimeout(() => finish(false), 45000);
+    post.submit();
+  };
   tForm.addEventListener('submit', e => {
     e.preventDefault();
     if (!validate(tForm, tNote, ['t-name', 't-email', 't-phone', 't-city', 't-years'], T_GROUPS)) return;
-    sendLead(tForm, tNote, {
+    const cvInput = document.getElementById('t-cvfile'), cv = cvInput && cvInput.files && cvInput.files[0];
+    if (cv && !(/\.pdf$/i.test(cv.name) || cv.type === 'application/pdf')) { cvInput.setAttribute('aria-invalid', 'true'); showNote(tNote, 'Please upload your CV as a PDF file.', true); return; }
+    if (cv && cv.size > 5 * 1024 * 1024) { cvInput.setAttribute('aria-invalid', 'true'); showNote(tNote, 'Your CV is larger than 5 MB. Please upload a smaller PDF.', true); return; }
+    (cv ? (f, b, o) => sendWithFile(f, b, o, cvInput) : sendLead)(tForm, tNote, {
       subject: 'Trainer application - ' + document.getElementById('t-name').value.trim(),
       title: 'New trainer application (ElearnersForum website)',
       pairs: answers(tForm, T_GROUPS),
