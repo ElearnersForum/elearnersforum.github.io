@@ -209,6 +209,7 @@ body[data-page="privacy"] main > [data-page="privacy"] { display: block; }
 .float-chip.c2 { top: 26%; right: -2%; }
 .float-chip.c3 { bottom: 12%; left: 8%; }
 .float-chip.c4 { bottom: 4%; right: 6%; }
+.hero-art.orbiting .float-chip { top: 0; left: 0; right: auto; bottom: auto; animation: none; will-change: transform, opacity; }
 @keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
 @keyframes ring { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
 @media (prefers-reduced-motion: no-preference) {
@@ -1681,6 +1682,35 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     }
   };
   applyConfig(CONFIG);
+  // Home picture: the four labels slowly orbit the book on an ellipse (live website only, not for visitors who prefer less motion).
+  (() => {
+    const art = document.querySelector('.hero-art');
+    if (!art || inClaude || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const chips = [...art.querySelectorAll('.float-chip')];
+    if (!chips.length) return;
+    art.classList.add('orbiting');
+    const PERIOD = 40000, t0 = performance.now();
+    let visible = true, running = false;
+    const loop = now => {
+      if (!visible) { running = false; return; }
+      const W = art.clientWidth, H = art.clientHeight;
+      chips.forEach((c, i) => {
+        const w = c.offsetWidth, h = c.offsetHeight;
+        if (!w) return;
+        const a = (now - t0) / PERIOD * 2 * Math.PI + i * Math.PI / 2;
+        const rx = Math.max(0, W / 2 - w / 2 - 6), ry = Math.max(0, (H / 2 - h / 2 - 6) * 0.8);
+        const x = W / 2 + rx * Math.cos(a) - w / 2, y = H / 2 + ry * Math.sin(a) - h / 2;
+        const depth = (Math.sin(a) + 1) / 2; // 0 at the back of the orbit, 1 at the front
+        c.style.transform = 'translate(' + x.toFixed(1) + 'px, ' + y.toFixed(1) + 'px) scale(' + (0.88 + 0.12 * depth).toFixed(3) + ')';
+        c.style.opacity = (0.72 + 0.28 * depth).toFixed(2);
+        c.style.zIndex = depth > 0.5 ? '2' : '1';
+      });
+      requestAnimationFrame(loop);
+    };
+    const kick = () => { if (!running) { running = true; requestAnimationFrame(loop); } };
+    if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es.some(e => e.isIntersecting); if (visible) kick(); }).observe(art);
+    kick();
+  })();
   // Home page numbers count up when they come into view (live website only, and not for visitors who prefer less motion).
   if (!inClaude && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.querySelectorAll('.hero-stats strong').forEach(el => {
