@@ -553,6 +553,25 @@ form.enquiry legend { grid-column: 1 / -1; font-family: var(--font-display); fon
 .chips label { display: inline-flex; align-items: center; gap: 8px; font-weight: 400; font-size: 15px; border: 1px solid var(--field-line); background: var(--bg); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
 .chips input { width: auto; margin: 0; accent-color: var(--accent); }
 .chips label:has(input:checked) { border-color: var(--accent); background: var(--ice); }
+.acc-hint { margin: 2px 0 10px; font-size: 14.5px; color: var(--muted); background: var(--tint); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+.acc-hint b { color: var(--ink); }
+#enquiry-form .area-groups { gap: 8px; }
+.chip-group.acc { border: 1px solid var(--line); border-radius: 12px; background: var(--bg); overflow: hidden; gap: 0; }
+.chip-group.acc > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 13px 16px; font-size: 13.5px; color: var(--ink); }
+.chip-group.acc > summary::-webkit-details-marker { display: none; }
+.chip-group.acc > summary::after { content: ""; width: 9px; height: 9px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); margin: -4px 4px 0 6px; transition: transform .2s; }
+.chip-group.acc[open] > summary::after { transform: rotate(-135deg); margin-top: 4px; }
+.chip-group.acc .acc-name { flex: 1; }
+.chip-group.acc .acc-count { white-space: nowrap; margin-left: auto; font-size: 12.5px; letter-spacing: 0; text-transform: none; font-weight: 600; color: var(--muted); }
+.chip-group.acc .acc-count.on { background: var(--accent); color: #fff; border-radius: 999px; padding: 3px 10px; }
+.chip-group.acc[open] > summary { border-bottom: 1px solid var(--line); }
+.chip-group.acc .chips { padding: 14px 16px 16px; }
+.chip-group.acc .chips input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.chip-group.acc .chips label { position: relative; }
+.chip-group.acc .chips label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip-group.acc .chips label:has(input:checked)::before { content: "\2713"; font-weight: 700; }
+.chip-group.acc .chips label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--muted); }
 .consent input { margin-top: 4px; accent-color: var(--accent); }
 .form-note { font-size: 15px; padding: 12px 14px; border-radius: 8px; background: var(--tint); display: grid; gap: 12px; justify-items: start; }
@@ -1475,8 +1494,9 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
           <fieldset>
             <legend>Training need</legend>
             <div class="field full"><span class="q" id="q-areas">Which areas do you want training in?</span>
+              <p class="acc-hint"><b>Tap a section to open it</b>, then tap as many programs as you like. You can choose programs from more than one section.</p>
               <div class="area-groups" role="group" aria-labelledby="q-areas">
-                <div class="chip-group"><span class="sub" id="g-leadership">Leadership</span>
+                <details class="chip-group acc"><summary class="sub" id="g-leadership"><span class="acc-name">Leadership</span><span class="acc-count"></span></summary>
                   <div class="chips" role="group" aria-labelledby="g-leadership">
                     <label><input type="checkbox" name="areas" value="Leadership &amp; Management" data-family="lead">Leadership &amp; Management</label>
                     <label><input type="checkbox" name="areas" value="LEAP: New Leaders" data-family="leap">LEAP · New Leaders</label>
@@ -1485,8 +1505,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
                     <label><input type="checkbox" name="areas" value="SHIFT: Change Management" data-family="shift">SHIFT · Change Management</label>
                     <label><input type="checkbox" name="areas" value="WINGS: Women in Leadership" data-family="wings">WINGS · Women in Leadership</label>
                   </div>
-                </div>
-                <div class="chip-group"><span class="sub" id="g-people">People development</span>
+                </details>
+                <details class="chip-group acc"><summary class="sub" id="g-people"><span class="acc-name">People development</span><span class="acc-count"></span></summary>
                   <div class="chips" role="group" aria-labelledby="g-people">
                     <label><input type="checkbox" name="areas" value="Communication &amp; Interpersonal Skills" data-family="comm">Communication</label>
                     <label><input type="checkbox" name="areas" value="Personal Effectiveness &amp; Productivity" data-family="pe">Personal Effectiveness</label>
@@ -1494,8 +1514,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
                     <label><input type="checkbox" name="areas" value="Teamwork, Collaboration &amp; Culture" data-family="team">Teamwork &amp; Culture</label>
                     <label><input type="checkbox" name="areas" value="OBL: Outbound &amp; Experiential Learning" data-family="obl">OBL · Outbound Learning</label>
                   </div>
-                </div>
-                <div class="chip-group"><span class="sub" id="g-sales">Sales development</span>
+                </details>
+                <details class="chip-group acc"><summary class="sub" id="g-sales"><span class="acc-name">Sales development</span><span class="acc-count"></span></summary>
                   <div class="chips" role="group" aria-labelledby="g-sales">
                     <label><input type="checkbox" name="areas" value="Sales, Service &amp; Customer Experience" data-family="sales">Sales &amp; Customer Experience</label>
                     <label><input type="checkbox" name="areas" value="SPARK: New Salespeople" data-family="spark">SPARK · New Salespeople</label>
@@ -1506,8 +1526,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
                     <label><input type="checkbox" name="areas" value="TRADE: Channel &amp; FMCG Sales" data-family="trade">TRADE · Channel &amp; FMCG Sales</label>
                     <label><input type="checkbox" name="areas" value="CALL: Inside Sales &amp; Telesales" data-family="call">CALL · Inside Sales &amp; Telesales</label>
                   </div>
-                </div>
-                <div class="chip-group"><span class="sub" id="g-process">Process development</span>
+                </details>
+                <details class="chip-group acc"><summary class="sub" id="g-process"><span class="acc-name">Process development</span><span class="acc-count"></span></summary>
                   <div class="chips" role="group" aria-labelledby="g-process">
                     <label><input type="checkbox" name="areas" value="Process Excellence &amp; Continuous Improvement" data-family="process">Process Excellence</label>
                     <label><input type="checkbox" name="areas" value="Quality &amp; Compliance Systems" data-family="quality">Quality &amp; Compliance</label>
@@ -1515,19 +1535,19 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
                     <label><input type="checkbox" name="areas" value="HR &amp; People Processes" data-family="hr">HR &amp; People Processes</label>
                     <label><input type="checkbox" name="areas" value="CLIMB: Career Development" data-family="climb">CLIMB · Career Development</label>
                   </div>
-                </div>
-                <div class="chip-group"><span class="sub" id="g-digital">Digital and AI skills</span>
+                </details>
+                <details class="chip-group acc"><summary class="sub" id="g-digital"><span class="acc-name">Digital and AI skills</span><span class="acc-count"></span></summary>
                   <div class="chips" role="group" aria-labelledby="g-digital">
                     <label><input type="checkbox" name="areas" value="AI Foundations" data-family="ai">AI Foundations</label>
                     <label><input type="checkbox" name="areas" value="Microsoft Office &amp; Data Skills" data-family="office">Microsoft Office &amp; Data</label>
                   </div>
-                </div>
-                <div class="chip-group"><span class="sub" id="g-language">Language and test preparation</span>
+                </details>
+                <details class="chip-group acc"><summary class="sub" id="g-language"><span class="acc-name">Language and test preparation</span><span class="acc-count"></span></summary>
                   <div class="chips" role="group" aria-labelledby="g-language">
                     <label><input type="checkbox" name="areas" value="IELTS Coaching" data-family="ielts" id="f-area-ielts">IELTS Coaching</label>
                   </div>
-                </div>
-                <div class="chip-group"><span class="sub" id="g-retail">Retail training</span>
+                </details>
+                <details class="chip-group acc"><summary class="sub" id="g-retail"><span class="acc-name">Retail training</span><span class="acc-count"></span></summary>
                   <div class="chips" role="group" aria-labelledby="g-retail">
                     <label><input type="checkbox" name="areas" value="Retail Customer Experience" data-family="retail-cx">Customer Experience</label>
                     <label><input type="checkbox" name="areas" value="Store Safety" data-family="retail-safety">Store Safety</label>
@@ -1538,14 +1558,14 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
                     <label><input type="checkbox" name="areas" value="Retail Compliance" data-family="retail-comp">Compliance</label>
                     <label><input type="checkbox" name="areas" value="Specialist Retail Skills" data-family="retail-spec">Specialist Skills</label>
                   </div>
-                </div>
-                <div class="chip-group"><span class="sub" id="g-industry">Hospitality, education and sustainability</span>
+                </details>
+                <details class="chip-group acc"><summary class="sub" id="g-industry"><span class="acc-name">Hospitality, education and sustainability</span><span class="acc-count"></span></summary>
                   <div class="chips" role="group" aria-labelledby="g-industry">
                     <label><input type="checkbox" name="areas" value="HOST: Hospitality Excellence" data-family="host">HOST · Hospitality Excellence</label>
                     <label><input type="checkbox" name="areas" value="TEACH: Educational Institutions" data-family="teach">TEACH · Educational Institutions</label>
                     <label><input type="checkbox" name="areas" value="GREEN: Sustainability &amp; ESG" data-family="green">GREEN · Sustainability &amp; ESG</label>
                   </div>
-                </div>
+                </details>
               </div>
             </div>
             <!-- One "which program?" dropdown per ticked area, filled from that area's modules on the Programs page -->
@@ -2028,6 +2048,26 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     const box = document.querySelector('#enquiry-form input[name="areas"][data-family="' + a.dataset.enquire + '"]');
     if (box && !box.checked) { box.checked = true; box.dispatchEvent(new Event('change', { bubbles: true })); }
   });
+  // ---------- Enquiry form sections: open and close, with a "selected" counter ----------
+  const accs = [...document.querySelectorAll('#enquiry-form details.acc')];
+  const accCount = () => accs.forEach(d => {
+    const all = d.querySelectorAll('input[name="areas"]').length, k = d.querySelectorAll('input[name="areas"]:checked').length;
+    const c = d.querySelector('.acc-count');
+    c.textContent = k ? k + ' selected' : all + (all === 1 ? ' program' : ' programs');
+    c.classList.toggle('on', k > 0);
+  });
+  document.getElementById('enquiry-form')?.addEventListener('change', accCount);
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[data-enquire]');
+    if (!a) return;
+    setTimeout(() => {
+      const box = document.querySelector('#enquiry-form input[name="areas"][data-family="' + a.dataset.enquire + '"]');
+      const d = box && box.closest('details.acc');
+      if (d) d.open = true;
+      accCount();
+    }, 0);
+  });
+  accCount();
   // ---------- Sending the enquiry and trainer forms ----------
   const fieldName = (f, el) => (el.dataset.mailLabel || f.querySelector('label[for="' + el.id + '"]')?.textContent || el.name).replace(/[*?]/g, '').trim();
   // The answers as [question, answer] pairs, in form order, skipping empty and hidden questions.
