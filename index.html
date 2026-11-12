@@ -736,7 +736,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
 
 
 
-<script type="application/json" id="site-config">{"leadEmail":"elearnersforum@gmail.com","enquiryFormUrl":"","quickFormUrl":"https://forms.gle/PwJdYoHa2Maqzc8v6","trainerFormUrl":"","testimonialFormUrl":"","portalUrl":"https://classroom.google.com/","mapUrl":"","gaId":""}</script>
+<script type="application/json" id="site-config">{"leadEmail":"info@elearnersforum.com","ccEmail":"elearnersforum@gmail.com","enquiryFormUrl":"","quickFormUrl":"https://forms.gle/PwJdYoHa2Maqzc8v6","trainerFormUrl":"","testimonialFormUrl":"","portalUrl":"https://classroom.google.com/","mapUrl":"","gaId":""}</script>
 <script type="application/json" id="cloud-data">{"sample":false,"words":[["Practical",9],["Engaging",8],["Insightful",7],["Interactive",7],["Confidence",6],["Relevant",6],["Great Learning",5],["Energising",5],["Real-world Experience",5],["Motivating",4],["Well-structured",4],["Actionable",4],["Teamwork",4],["Inspiring",4],["Supportive",3],["Eye-opening",3],["Fun",3],["Thought-provoking",3],["Useful",3],["Clear Understanding",3],["Leadership",3],["Growth",2],["Collaborative",2],["Memorable",2],["Empowering",2],["Focused",2],["Reflective",2],["Impactful",2],["Applicable",2],["Great Trainer",3]]}</script>
 
 <div id="ef-root">
@@ -1740,6 +1740,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     </div>
     <div class="ef-links" id="ef-links" hidden="" style="margin-top:10px">
       <label for="ef-l-leademail">Email that receives enquiries and trainer applications<input id="ef-l-leademail" type="email" placeholder="you@example.com"></label>
+      <label for="ef-l-ccemail">Also send a copy of each enquiry to (optional)<input id="ef-l-ccemail" type="email" placeholder="you@gmail.com"></label>
       <label for="ef-l-enquiry">Training enquiry Google Form link<input id="ef-l-enquiry" type="url" placeholder="https://docs.google.com/forms/…"></label>
       <label for="ef-l-quick">Quick contact Google Form link<input id="ef-l-quick" type="url" placeholder="https://docs.google.com/forms/…"></label>
       <label for="ef-l-trainer">Trainer application Google Form link<input id="ef-l-trainer" type="url" placeholder="https://docs.google.com/forms/…"></label>
@@ -1824,6 +1825,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
   };
   // Enquiries and applications go to the inbox set in Customise → Links (the Contact page email if none is set).
   const leadEmail = () => isEmail(CONFIG.leadEmail) ? CONFIG.leadEmail.trim() : siteEmail();
+  // A copy of every enquiry also goes to this inbox (Customise → Links); leave it empty to send no copy.
+  const ccEmail = () => isEmail(CONFIG.ccEmail) && CONFIG.ccEmail.trim().toLowerCase() !== leadEmail().toLowerCase() ? CONFIG.ccEmail.trim() : '';
   const mailto = (subject, body) => 'mailto:' + leadEmail() + '?subject=' + encodeURIComponent(subject) + (body ? '&body=' + encodeURIComponent(body) : '');
   // The WhatsApp number is the phone number shown on the Contact page, with India's +91 added to 10-digit numbers.
   const waNumber = () => {
@@ -2149,7 +2152,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       const res = await fetch('https://formsubmit.co/ajax/' + leadEmail(), {
         method: 'POST', signal: stop.signal,
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ _subject: subject, _template: 'table', _captcha: 'false', _autoresponse: confirmation, email: replyTo, ...fields }),
+        body: JSON.stringify({ _subject: subject, _template: 'table', _captcha: 'false', _autoresponse: confirmation, ...(ccEmail() ? { _cc: ccEmail() } : {}), email: replyTo, ...fields }),
       });
       clearTimeout(timer);
       const data = await res.json().catch(() => ({}));
@@ -2308,7 +2311,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     const post = document.createElement('form');
     post.method = 'POST'; post.enctype = 'multipart/form-data'; post.action = 'https://formsubmit.co/' + leadEmail(); post.target = frameName; post.hidden = true;
     const add = (k, v) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = v; post.appendChild(i); };
-    add('_subject', subject); add('_template', 'table'); add('_captcha', 'false'); add('_autoresponse', confirmation); add('email', replyTo);
+    add('_subject', subject); add('_template', 'table'); add('_captcha', 'false'); add('_autoresponse', confirmation); if (ccEmail()) add('_cc', ccEmail()); add('email', replyTo);
     pairs.filter(([, v]) => v !== replyTo).forEach(([k, v]) => add(k, v));
     // Move the visitor's own file box into the post (it keeps the chosen PDF), and put it back afterwards.
     const holder = fileInput.parentNode, after = fileInput.nextSibling;
@@ -2391,7 +2394,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
       touched = { main: !!savedMain, high: !!savedHigh };
     };
     resetPickers();
-    const LINKS = { 'ef-l-leademail': 'leadEmail', 'ef-l-enquiry': 'enquiryFormUrl', 'ef-l-quick': 'quickFormUrl', 'ef-l-trainer': 'trainerFormUrl', 'ef-l-testimonial': 'testimonialFormUrl', 'ef-l-portal': 'portalUrl', 'ef-l-map': 'mapUrl', 'ef-l-ga': 'gaId' };
+    const LINKS = { 'ef-l-leademail': 'leadEmail', 'ef-l-ccemail': 'ccEmail', 'ef-l-enquiry': 'enquiryFormUrl', 'ef-l-quick': 'quickFormUrl', 'ef-l-trainer': 'trainerFormUrl', 'ef-l-testimonial': 'testimonialFormUrl', 'ef-l-portal': 'portalUrl', 'ef-l-map': 'mapUrl', 'ef-l-ga': 'gaId' };
     const fillLinks = cfg => Object.entries(LINKS).forEach(([id, key]) => { $(id).value = cfg[key] || ''; });
     const readLinks = () => { const cfg = { ...CONFIG }; Object.entries(LINKS).forEach(([id, key]) => { cfg[key] = $(id).value.trim(); }); return cfg; };
     fillLinks(CONFIG);
@@ -2606,7 +2609,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
         const stop = new AbortController(), timer = setTimeout(() => stop.abort(), 8000);
         await fetch('https://formsubmit.co/', { mode: 'no-cors', cache: 'no-store', signal: stop.signal });
         clearTimeout(timer);
-        line.textContent = 'Form emails: connected. Enquiries and applications go to ' + leadEmail() + '.';
+        line.textContent = 'Form emails: connected. Enquiries and applications go to ' + leadEmail() + (ccEmail() ? ', with a copy to ' + ccEmail() : '') + '.';
       } catch (e) {
         line.textContent = 'Form emails can\'t be sent from this Claude preview because it blocks outside connections. They work once the website is hosted (Netlify or your domain).';
       }
@@ -2916,10 +2919,10 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     };
 
     save.addEventListener('click', async () => {
-      const bad = Object.keys(LINKS).find(id => { const v = $(id).value.trim(); return v && (id === 'ef-l-leademail' ? !isEmail(v) : id === 'ef-l-ga' ? !/^G-[A-Z0-9]+$/i.test(v) : !/^https:\/\//i.test(v)); });
+      const bad = Object.keys(LINKS).find(id => { const v = $(id).value.trim(); return v && ((id === 'ef-l-leademail' || id === 'ef-l-ccemail') ? !isEmail(v) : id === 'ef-l-ga' ? !/^G-[A-Z0-9]+$/i.test(v) : !/^https:\/\//i.test(v)); });
       if (bad) {
         $('ef-links').hidden = false; $(bad).focus();
-        say(bad === 'ef-l-leademail' ? 'Enter a full email address, like name@gmail.com, then save again.' : bad === 'ef-l-ga' ? 'The Google Analytics ID looks like G-ABC123XYZ. Fix it, then save again.' : 'Links must start with https://. Fix the highlighted link, then save again.');
+        say((bad === 'ef-l-leademail' || bad === 'ef-l-ccemail') ? 'Enter a full email address, like name@gmail.com, then save again.' : bad === 'ef-l-ga' ? 'The Google Analytics ID looks like G-ABC123XYZ. Fix it, then save again.' : 'Links must start with https://. Fix the highlighted link, then save again.');
         return;
       }
       const unfinished = [...quotes.querySelectorAll('.quote')].find(q => {
