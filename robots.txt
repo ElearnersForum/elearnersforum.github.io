@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://elearnersforum.com/sitemap.xml
+Sitemap: https://www.elearnersforum.com/sitemap.xml

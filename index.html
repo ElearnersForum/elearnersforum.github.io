@@ -11,9 +11,9 @@
 <meta property="og:site_name" content="ElearnersForum">
 <meta property="og:title" content="ElearnersForum | Corporate training in Bengaluru">
 <meta property="og:description" content="Leadership, behavioural skills, process excellence, retail training and IELTS coaching, built around your business goals.">
-<meta property="og:url" content="https://elearnersforum.com/">
-<link rel="canonical" href="https://elearnersforum.com/">
-<meta property="og:image" content="https://elearnersforum.com/og-image.jpg">
+<meta property="og:url" content="https://www.elearnersforum.com/">
+<link rel="canonical" href="https://www.elearnersforum.com/">
+<meta property="og:image" content="https://www.elearnersforum.com/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -2302,7 +2302,7 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
   // A file can't travel in the usual email request, so the answers and the PDF are posted the classic way into a hidden frame;
   // FormSubmit then emails them to our inbox with the CV attached.
   const sendWithFile = (f, box, { subject, title, pairs, replyTo, name, thanks, confirm }, fileInput) => {
-    if (inClaude) { showNote(box, 'CV upload works on the live website, elearnersforum.com. Here inside Claude, remove the file to test the form.', true); return; }
+    if (inClaude) { showNote(box, 'CV upload works on the live website, www.elearnersforum.com. Here inside Claude, remove the file to test the form.', true); return; }
     const phone = (document.querySelector('[data-kind="phone"]')?.textContent || '').trim();
     const confirmation = 'Dear ' + name + ',\n\n' + confirm + '\n\nHere is a copy of what you sent us:\n' +
       pairs.map(([k, v]) => '• ' + k + ': ' + v).join('\n') + '\n• CV: ' + fileInput.files[0].name +
