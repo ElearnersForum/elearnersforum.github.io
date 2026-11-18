@@ -1788,6 +1788,8 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     page = page || 'home';
     const changed = document.body.dataset.page !== page;
     document.body.dataset.page = page;
+    // Visitor statistics: count each section as its own page (Google Analytics, live website only).
+    if (window.efTrackPage && (changed || id === 'meet')) window.efTrackPage(id === 'meet' ? 'meet' : page);
     // Back and Forward return to where the visitor was on that page.
     const y = history.state && typeof history.state.y === 'number' ? history.state.y : null;
     if (y !== null) requestAnimationFrame(() => window.scrollTo({ top: y, behavior: 'instant' }));
@@ -1988,7 +1990,20 @@ body.ef-editing [contenteditable="true"]:focus { outline-style: solid; outline-w
     const ga = document.createElement('script'); ga.async = true; ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(CONFIG.gaId);
     document.head.appendChild(ga);
     window.dataLayer = window.dataLayer || []; window.gtag = function () { window.dataLayer.push(arguments); };
-    window.gtag('js', new Date()); window.gtag('config', CONFIG.gaId);
+    window.gtag('js', new Date()); window.gtag('config', CONFIG.gaId, { send_page_view: false });
+    // Each section (Home, Programs, About...) is reported as a separate page.
+    const PAGE_NAMES = { home: 'Home', programs: 'Programs', about: 'About Us', testimonials: 'Testimonials', careers: 'Careers', contact: 'Contact Us', meet: 'Meet us online', privacy: 'Privacy' };
+    window.efTrackPage = page => window.gtag('event', 'page_view', {
+      page_title: (PAGE_NAMES[page] || page) + ' | ElearnersForum',
+      page_location: location.origin + '/' + (page === 'home' ? '' : page),
+      page_path: '/' + (page === 'home' ? '' : page)
+    });
+    window.efTrackPage(location.hash === '#meet' ? 'meet' : (document.body.dataset.page || 'home'));
+    // Count clicks on "Book a time" (Meet us online calendar) as bookings started.
+    document.addEventListener('click', e => {
+      const a = e.target.closest('a[href*="calendar.app.google"]');
+      if (a) window.gtag('event', 'book_meeting_click', { link_text: a.textContent.trim(), page_title: 'Meet us online | ElearnersForum' });
+    }, true);
   }
 
   // Testimonials: show the "coming soon" message until at least one testimonial has been added.
