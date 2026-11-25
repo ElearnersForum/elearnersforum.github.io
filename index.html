@@ -762,7 +762,11 @@ body.ef-editing .wa-float { display: none; }
 .mail-float::before, .wa-float svg { filter: drop-shadow(0 1px 3px rgba(8, 20, 54, 0.55)); }
 /* Hero headline: smaller so it sits on fewer lines */
 .hero h1 { font-size: clamp(34px, 4.4vw, 56px); max-width: 22ch; }
-</style>
+
+/* Career journeys: steps rise one after another */
+.ladder.lr li { animation: none; opacity: 0; transform: translateY(40px) scaleY(0.6); transform-origin: bottom; }
+.ladder.lr.in li { opacity: 1; transform: none; transition: opacity .5s calc(var(--h) * .18s), transform .7s cubic-bezier(.2,.8,.2,1) calc(var(--h) * .18s); }
+@media (max-width: 760px) { @media (prefers-reduced-motion: reduce) { .ladder.lr li, .ladder.lr.in li { opacity: 1; transform: none; transition: none; } </style>
 <style id="ef-theme"></style>
 <style id="ef-fonts"></style>
 </head>
@@ -3077,6 +3081,7 @@ body.ef-editing .wa-float { display: none; }
   })();
 </script>
 <script>{document.querySelectorAll('.tm-track').forEach(t=>{const n=t.children.length;for(let i=0;i<n;i++){const c=t.children[i].cloneNode(true);c.setAttribute('aria-hidden','true');c.querySelector('img').alt='';t.appendChild(c);}});}</script>
+<script>{const ol=document.querySelector('ol.ladder');if(ol&&'IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){ol.classList.add('lr');const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){ol.classList.add('in');io.disconnect();}})},{threshold:.3});io.observe(ol);}}</script>
 
 </body>
 </html>
