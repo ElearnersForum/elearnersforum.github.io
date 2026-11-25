@@ -766,7 +766,16 @@ body.ef-editing .wa-float { display: none; }
 /* Career journeys: steps rise one after another */
 .ladder.lr li { animation: none; opacity: 0; transform: translateY(40px) scaleY(0.6); transform-origin: bottom; }
 .ladder.lr.in li { opacity: 1; transform: none; transition: opacity .5s calc(var(--h) * .18s), transform .7s cubic-bezier(.2,.8,.2,1) calc(var(--h) * .18s); }
-@media (max-width: 760px) { @media (prefers-reduced-motion: reduce) { .ladder.lr li, .ladder.lr.in li { opacity: 1; transform: none; transition: none; } </style>
+@media (prefers-reduced-motion: reduce) { .ladder.lr li, .ladder.lr.in li { opacity: 1; transform: none; transition: none; } }
+/* Email button: small menu with webmail options, since many computers have no email app set up */
+.mail-menu { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(max(16px, env(safe-area-inset-bottom, 0px)) + 136px); z-index: 41; width: 250px; background: rgba(255, 255, 255, 0.96); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 14px 40px rgba(8, 20, 54, 0.25); padding: 8px; display: grid; gap: 2px; }
+.mail-menu[hidden] { display: none; }
+.mail-menu p { margin: 4px 10px 6px; font-size: 13px; color: #4a5b85; }
+.mail-menu p b { color: #0b1e5b; }
+.mail-menu a, .mail-menu button { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 12px; border: 0; border-radius: 10px; background: none; font: 600 15px Arial, Helvetica, sans-serif; color: #0b1e5b; text-decoration: none; cursor: pointer; text-align: left; }
+.mail-menu a:hover, .mail-menu button:hover, .mail-menu a:focus-visible, .mail-menu button:focus-visible { background: #e3edfd; outline: none; }
+@media (max-width: 600px) { .mail-menu { bottom: calc(max(16px, env(safe-area-inset-bottom, 0px)) + 118px); } }
+</style>
 <style id="ef-theme"></style>
 <style id="ef-fonts"></style>
 </head>
@@ -1764,6 +1773,12 @@ body.ef-editing .wa-float { display: none; }
   </div>
 </footer>
 <a class="btn btn-primary mail-float" href="mailto:info@elearnersforum.com" aria-label="Email us" title="Email us"><span>Email us</span></a>
+<div class="mail-menu" id="mail-menu" role="menu" aria-label="Email us" hidden="">
+  <p>No email app opened? Email us at <b>info@elearnersforum.com</b></p>
+  <a role="menuitem" data-mail="gmail" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=info@elearnersforum.com&amp;su=Enquiry%20from%20the%20ElearnersForum%20website" target="_blank" rel="noopener">Open in Gmail</a>
+  <a role="menuitem" data-mail="outlook" href="https://outlook.live.com/mail/0/deeplink/compose?to=info@elearnersforum.com&amp;subject=Enquiry%20from%20the%20ElearnersForum%20website" target="_blank" rel="noopener">Open in Outlook</a>
+  <button role="menuitem" type="button" data-mail="copy">Copy email address</button>
+</div>
 <a class="wa-float" href="https://wa.me/919008039087" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="Chat on WhatsApp"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linejoin="round" d="M12 3.5a8.5 8.5 0 0 0-7.3 12.8L3.5 20.5l4.3-1.1A8.5 8.5 0 1 0 12 3.5z"></path><circle cx="8.5" cy="12" r="1.25" fill="#ffffff"></circle><circle cx="12" cy="12" r="1.25" fill="#ffffff"></circle><circle cx="15.5" cy="12" r="1.25" fill="#ffffff"></circle></svg></a>
 </div>
 
@@ -3082,6 +3097,22 @@ body.ef-editing .wa-float { display: none; }
 </script>
 <script>{document.querySelectorAll('.tm-track').forEach(t=>{const n=t.children.length;for(let i=0;i<n;i++){const c=t.children[i].cloneNode(true);c.setAttribute('aria-hidden','true');c.querySelector('img').alt='';t.appendChild(c);}});}</script>
 <script>{const ol=document.querySelector('ol.ladder');if(ol&&'IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){ol.classList.add('lr');const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){ol.classList.add('in');io.disconnect();}})},{threshold:.3});io.observe(ol);}}</script>
+<script>{const btn=document.querySelector('.mail-float'),menu=document.getElementById('mail-menu');if(btn&&menu){
+const subj='Enquiry from the ElearnersForum website';
+const close=()=>{menu.hidden=true;};
+const fill=()=>{const em=(btn.getAttribute('href')||'').replace(/^mailto:/,'').split('?')[0]||'info@elearnersforum.com';menu.querySelector('b').textContent=em;
+menu.querySelector('[data-mail="gmail"]').href='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(em)+'&su='+encodeURIComponent(subj);
+menu.querySelector('[data-mail="outlook"]').href='https://outlook.live.com/mail/0/deeplink/compose?to='+encodeURIComponent(em)+'&subject='+encodeURIComponent(subj);};
+let left=false;const away=()=>{left=true;};
+btn.addEventListener('click',()=>{if(!menu.hidden){close();return;}left=false;
+window.addEventListener('blur',away,{once:true});document.addEventListener('visibilitychange',away,{once:true});
+setTimeout(()=>{window.removeEventListener('blur',away);document.removeEventListener('visibilitychange',away);
+if(!left&&document.visibilityState==='visible'){fill();menu.hidden=false;menu.querySelector('a').focus();}},1200);});
+menu.addEventListener('click',e=>{const c=e.target.closest('[data-mail="copy"]');if(c){const em=menu.querySelector('b').textContent;const done=()=>{c.textContent='Copied ✓';setTimeout(()=>{c.textContent='Copy email address'},1800)};
+if(navigator.clipboard)navigator.clipboard.writeText(em).then(done,()=>{c.textContent=em});else c.textContent=em;return;}if(e.target.closest('a'))setTimeout(close,150);});
+document.addEventListener('click',e=>{if(!menu.hidden&&!menu.contains(e.target)&&!btn.contains(e.target))close();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!menu.hidden){close();btn.focus();}});
+}}</script>
 
 </body>
 </html>
